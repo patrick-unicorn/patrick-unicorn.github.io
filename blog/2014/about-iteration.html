@@ -484,7 +484,7 @@ class Iterator : IEnumerator&lt;object&gt; {
 <p>简言之，协程的全部精神就在于控制流的<strong>主动</strong>让出和恢复(yield/resume)。我们熟悉的子过程调用可以看作在返回时让出控制流的一种特殊的协程，其内部状态在返回时被丢弃了，因此不存在“恢复”这个操作。</p>
 </blockquote>
 
-<p>协程的操作原语是<code>yield/resume</code>，此<code>yield</code>与迭代器的<code>yield</code>的操作语义实质上是相同的，均代表“出让控制权”。迭代器本身就是一种特殊的协程，其特殊之处在于它的状态恢复是“自动”的，并不需要<strong>显示resume</strong>。明白了两者的关系，对于Unity3D(C#)中的协程实现也就明了了。</p>
+<p>协程的操作原语是<code>yield/resume</code>，此<code>yield</code>与迭代器的<code>yield</code>的操作语义实质上是相同的，均代表“出让控制权”。迭代器本身就是一种特殊的协程，其特殊之处在于它的状态恢复是“自动”的，并不需要<strong>显示resume</strong>。Unity3D(C#)中的协程实现即是如此。</p>
 
 <p>关于协程更深入的讨论可以参看<a href="http://blog.youxu.info/2014/12/04/coroutine/">这里</a></p>
 
