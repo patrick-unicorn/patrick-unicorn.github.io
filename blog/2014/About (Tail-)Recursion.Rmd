@@ -1,0 +1,46 @@
+**声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@gmail.com>
+
+* * *
+
+http://www.nowamagic.net/librarys/veda/detail/2324
+http://www.nowamagic.net/librarys/veda/detail/2316
+http://www.nowamagic.net/librarys/veda/detail/2314
+http://zh.wikipedia.org/zh/%E8%BF%AD%E4%BB%A3
+http://zh.wikipedia.org/zh/%E5%B0%BE%E8%B0%83%E7%94%A8
+http://blog.csdn.net/dreamerway/article/details/22482221
+
+## WHAT
+
+#### 递归(recursion)
+
+#### 尾递归(tail-recursion)
+
+#### 迭代(iteration)
+
+#### 数学基础
+
+数学归纳法。
+
+#### 方法论思想
+
++ 分而治之
++ 
+
+#### 递归与迭代
+
+
+## WHY
+
+#### 递归
+
+递归符合直觉，对计算机不友好；迭代对计算机友好，对程序员不够直觉。
+
+#### 尾递归
+
+防止递归导致的栈溢出
+
+## HOW
+
+应用递归方法的基本点：
++ 这个问题是否可以分解为形式相同但规模更小的问题？
++ 如果存在这样一种分解，那么这种分解是否存在一种最简单情境？

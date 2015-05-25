@@ -1,0 +1,13 @@
+The Direction of Software Architecture
+========================================================
+
+## 服务化(Service)
+
+后端以提供数据接口，内部处理逻辑，不关注展现。
+
+## 云端化(Cloud)
+
+
+
+## 分布式(Distribution)
+
