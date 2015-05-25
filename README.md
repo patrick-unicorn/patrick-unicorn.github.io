@@ -20,3 +20,6 @@ Hi, this site is my opensource respository which includes all [my wiki's][1] art
 [5]: http://www.gliffy.com/
 [6]: http://www.mathjax.org/
 [7]: https://wordpress.org/plugins/mathjax-latex/
+[8]: https://github.com/patrick-unicorn/Blog
+
+**注：旧的文章在[Blog][8]工程下，只做部分迁移。**
