@@ -1,6 +1,6 @@
 ---
 author: "patrick.unicorn"
-date: "Friday, December 05, 2014"
+date: "2015年05月27日 星期三"
 output: 
   html_document:
     theme: null
