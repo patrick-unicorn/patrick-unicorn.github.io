@@ -1,16 +1,17 @@
 ---
-title: "迭代的认识"
 author: "patrick.unicorn"
 date: "Friday, December 05, 2014"
-output: html_document
+output: 
+  html_document:
+    theme: null
+    highlight: null
+    css: ../css/main.css
 ---
 
 迭代的认识
 ====
 
-**声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@foxmail.com>
-
-* * *
+**声明：** 所写为个人所读所想，限于知识层次，请批判阅读。
 
 ## Concept(概念)
 

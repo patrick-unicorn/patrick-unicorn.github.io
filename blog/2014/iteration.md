@@ -2,10 +2,10 @@
 title: "迭代的认识"
 author: "patrick.unicorn"
 date: "Friday, December 05, 2014"
-output: html_document
+output: pdf_document
 ---
 
-迭代的认识
+迭代的认识dd
 ====
 
 **声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@foxmail.com>
