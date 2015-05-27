@@ -1,11 +1,17 @@
 ---
-title: "Scheme Basics - 1"
 author: "patrick.unicorn"
-date: "Monday, November 10, 2014"
-output: html_document
+date: "2014年08月02日"
+output: 
+  html_document:
+    theme: null
+    highlight: null
+    css: ../css/main.css
 ---
 
-**声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@gmail.com>
+Scheme Basics
+===
+
+**声明：** 所写为个人所读所想，限于知识层次，请批判阅读。
 
 * * *
 
@@ -17,17 +23,19 @@ output: html_document
 
 <!--more-->
 
-> 作用域的两种形式：静态作用域和动态作用域。
->
-> 1. 静态作用域是指声明的作用域是根据程序正文在编译时就确定的，有时也称为词法作用域。
-> 2. 动态作用域是指程序中某个变量所引用的对象是在程序运行时刻根据程序的控制流信息来确定的。
->
-> 静态作用域和动态作用域的一个重要区别在于：静态作用域规则查找一个变量声明时依赖的是源程序中块之间的静态关系；而动态作用域规则依赖的是程序执行时的函数调用顺序。说的具体点，就是静态作用域查找的是距离当前作用域最近的外层作用域中同名标识符的声明，而动态作用域则是查找最近的活动记录（关于活动记录见我的上一篇随笔）中的同名标识符声明。
->
-> 大多数的编程语言都采用的是静态作用域，如C/Java/C#/Scheme/javascript等等；而有些语言采用动态作用域，比如[newLISP][2],有些语言同时支持两种作用域，比如Perl。
->
-> 下面是一个C的例子：
-> ```
+<blockquote>
+
+作用域的两种形式：静态作用域和动态作用域。
+
+1. 静态作用域是指声明的作用域是根据程序正文在编译时就确定的，有时也称为词法作用域。
+2. 动态作用域是指程序中某个变量所引用的对象是在程序运行时刻根据程序的控制流信息来确定的。
+
+静态作用域和动态作用域的一个重要区别在于：静态作用域规则查找一个变量声明时依赖的是源程序中块之间的静态关系；而动态作用域规则依赖的是程序执行时的函数调用顺序。说的具体点，就是静态作用域查找的是距离当前作用域最近的外层作用域中同名标识符的声明，而动态作用域则是查找最近的活动记录（关于活动记录见我的上一篇随笔）中的同名标识符声明。
+
+大多数的编程语言都采用的是静态作用域，如C/Java/C#/Scheme/javascript等等；而有些语言采用动态作用域，比如[newLISP][2],有些语言同时支持两种作用域，比如Perl。
+
+下面是一个C的例子：
+```
 int x = 1;
 int g(int z) { return x + z; }
 int f(int y)
@@ -36,17 +44,19 @@ int f(int y)
   return g(y*x);
 }
 f(3);
-> ```
->
-> 调用f(3)之后，会间接调用g(12)，此时的堆栈结构如下：
->
-> + 外层： x = 1
->
-> + f(3):  y = 3   x = 4
->
-> + g(12): z = 12
-> 
-> 在采用动态作用域规则的情况下，表达式`x+z`中的x会从最近的活动记录中寻找变量x的值，也即函数调用f(3)的活动记录中的x值，则x的值4；而如果采用静态作用域规则，表达式`x+z`中的变量x则从函数g定义所在作用域的外层作用域中寻找，此时x的值为1。
+```
+
+调用f(3)之后，会间接调用g(12)，此时的堆栈结构如下：
+
++ 外层： x = 1
+
++ f(3):  y = 3   x = 4
+
++ g(12): z = 12
+
+在采用动态作用域规则的情况下，表达式`x+z`中的x会从最近的活动记录中寻找变量x的值，也即函数调用f(3)的活动记录中的x值，则x的值4；而如果采用静态作用域规则，表达式`x+z`中的变量x则从函数g定义所在作用域的外层作用域中寻找，此时x的值为1。
+
+</blockquote>
 
 **{:}** 支持自定义控制结构，如通常的if，while等等。这通常需要使用continuations。
 
@@ -113,7 +123,9 @@ quote等价于'(单引号), 即`(define a 'xyz) => (define a (quote xyz))`。
 下面是一些引用的例子：
 
 + `'(+ 2 5)` 代表表达式(+ 2 3)本身，不会对(+ 2 3)求值
+
 + `'+` 代表加号本身
+
 + `'()` 代表空表
     
 另外值得注意的一点是，`'xyz`与字符串`"xyz"`不等价，前者是xyz符号的引用，后者是字符串。
@@ -161,21 +173,27 @@ car和cdr分别是寄存器地址部分（Contents of the Address part of the Re
 **{:}** 算术运算
 
 + 加：`(+ 1 2)`
+
 + 减：`(- 1 2)`
+
 + 乘：`(* 1 2)`
+
 + 除：`(/ 1 2)`
+
 + 幂：`(expt 2 3)` 2的3次方
+
 + 商：`(quotient 7 3)`
+
 + 余：`(modulo 7 3)`
 
 **{:}** `(lambda (var...) body1 body2 ...)`定义过程(函数)：
 
-    ```
-    (let ((double (lambda (x) (+ x x)))
-        (list (double (* 3 4))
-            (double (/ 99 11))
-            (double (- 2 7))))
-    ```
+```
+(let ((double (lambda (x) (+ x x)))
+    (list (double (* 3 4))
+        (double (/ 99 11))
+        (double (- 2 7))))
+```
 
 **{:}** Lambda参数表形式
 
@@ -221,68 +239,96 @@ car和cdr分别是寄存器地址部分（Contents of the Address part of the Re
 ```
 
 **{:}** `(define ...)`定义全局变量。
-**{:}** `(cadr [list]`等价于`(car (cdr [list]))`；`(cddr [list])`等价于`(cdr (cdr [list]))`。
+
+**{:}** `(cadr [list])`等价于`(car (cdr [list]))`；`(cddr [list])`等价于`(cdr (cdr [list]))`。
+
 **{:}** 下面的函数定义形式是等价的。
 
 ```
 (define f_name 
   (lambda (var0 var1 ... varn) e1 e2 ... en)
-等价于
+  
+<=>  
+
 (define (f_name var0 var1 ... varn) 
   e1 e2 ... en)
   
 (define f_name 
   (lambda varr 
      e1 e2 ... en))
-等价于
+
+<=>
+
 (define (f_name . varr) 
   e1 e2 ... en)
   
 (define f_name 
   (lambda (var1 var2 ... varn . varr) 
     e1 e2 ... en))
-等价于
+
+<=>
+
 (define (f_name var1 var2 ... varn . varr) 
     e1 e2 ... en)
 ```
 
-**{:}** 逻辑运算符(过程)：`and`、`or`、`not`、`=`、`&lt;`、`&gt;`、`&lt;=`、`&gt;=` 
+**{:}** 逻辑运算符 
 
-> eq?
-> 该函数比较两个对象的地址，如果相同的话就返回#t。例如，(eq? str str)返回#t，因为str本身的地址是一致的。与此相对的，因为字符串”hello”和”hello”被储存在了不同的地址中，函数将返回#f。不要使用eq?来比较数字，因为不仅在R5RS中，甚至在MIT-Scheme实现中，它都没有指定返回值。使用eqv?或者=替代。
->
-> eqv?
-> 该函数比较两个存储在内存中的对象的类型和值。如果类型和值都一致的话就返回#t。对于过程（lambda表达式）的比较依赖于具体的实现。这个函数不能用于类似于表和字符串一类的序列比较，因为尽管这些序列看起来是一致的，但它们的值是存储在不同的地址中。
->
-> equal?
-> 该函数用于比较类似于表或者字符串一类的序列。
+`and`、`or`、`not`、`=`、`&lt;`、`&gt;`、`&lt;=`、`&gt;=` 
+
+<q>
+eq?
+该函数比较两个对象的地址，如果相同的话就返回#t。例如，(eq? str str)返回#t，因为str本身的地址是一致的。与此相对的，因为字符串”hello”和”hello”被储存在了不同的地址中，函数将返回#f。不要使用eq?来比较数字，因为不仅在R5RS中，甚至在MIT-Scheme实现中，它都没有指定返回值。使用eqv?或者=替代。
+</q>
+
+<q>
+eqv?
+该函数比较两个存储在内存中的对象的类型和值。如果类型和值都一致的话就返回#t。对于过程（lambda表达式）的比较依赖于具体的实现。这个函数不能用于类似于表和字符串一类的序列比较，因为尽管这些序列看起来是一致的，但它们的值是存储在不同的地址中。
+</q>
+
+<q>
+equal?
+该函数用于比较类似于表或者字符串一类的序列。
+</q>
 
 **{:}** 类型判断过程：
 
 + pair? 如果对象为序对则返回#t；
+
 + list? 如果对象是一个表则返回#t。要小心的是空表’()是一个表但是不是一个序对。
+
 + null? 如果对象是空表’()的话就返回#t。
+
 + symbol? 如果对象是一个符号则返回#t。
+
 + char? 如果对象是一个字符则返回#t。
+
 + string? 如果对象是一个字符串则返回#t。
+
 + number? 如果对象是一个数字则返回#t。
+
 + complex? 如果对象是一个复数则返回#t。
+
 + real? 如果对象是一个实数则返回#t。
+
 + rational? 如果对象是一个有理数则返回#t。
+
 + integer? 如果对象是一个整数则返回#t。
+
 + exact? 如果对象不是一个浮点数的话则返回#t。
+
 + inexact? 如果对象是一个浮点数的话则返回#t。
 
 **{:}** 分支语句：`(cond (test expr) ... (else expr))`，其中else部分不是必须的。
 
 **{:}** `(map [procedure] [list1] ... [listN])`是内置的过程，表示将某个过程应用到一些表上，其中各个list的长度必须是一致的。
 
-    ```
-    (map + '(1 2 3) '(1 2 3))     ; (2 4 6)
-    (map abs '(-1 -2 -3))         ; (1 2 3)
-    ```
+```
+(map + '(1 2 3) '(1 2 3))     ; (2 4 6)
+(map abs '(-1 -2 -3))         ; (1 2 3)
+```
 
-**{:}** Scheme中的赋值表达式为`set! [var-name] [var-value]`，很多情况下，其可以被lambda过程(let本质上也是Lambda过程)所替代。
+**{:}** Scheme中的赋值表达式为`set! [var-name]  [var-value]`
 
 **{:}** 在Scheme中，当需要变量(V)记录多个函数(过程)共享状态，而又不希望该变量在全局时，可以使用let绑定该变量，并在相应过程(A)中使用set!维护变量状态，最终，过程A在全局可见，但是变量V是全局不可见的。[注：这有点类似与Java/C#中的属性器，即用方法封闭变量的外部可见性]。
 
@@ -303,20 +349,32 @@ car和cdr分别是寄存器地址部分（Contents of the Address part of the Re
 
 **{:}** Scheme中**关键字**、**函数**、**变量**之间的界线很模糊，事实上，它们都可以理解为过程(函数)。
 
-**{:}** 布尔类型(boolean) `#t` - true `#f` - false
+**{:}** 布尔类型(boolean) `#t` - true; `#f` - false
 
 **{:}** 数值类型
-    1. 整型(integer) `(define n 1)`
-       **#d10**   十进制，#d可以省略
-       **#b010**  二进制
-       **#o127**  八进制
-       **#x32ef** 十六进制
-    2. 有理数(retional) `(defined n 1.2)`
-    3. 实数(real) `(define n 2/3)`
-    4. 复数(complex) `(define n 4+2i)`
+
+1. 整型(integer) `(define n 1)`
+
+<blockquote>
+   **#d10**   十进制，#d可以省略
+   
+   **#b010**  二进制
+   
+   **#o127**  八进制
+   
+   **#x32ef** 十六进制
+</blockquote>
+   
+2. 有理数(retional) `(defined n 1.2)`
+
+3. 实数(real) `(define n 2/3)`
+
+4. 复数(complex) `(define n 4+2i)`
     
-**{:}** let绑定的一般形式`(let [name] ((var expr) ...) body1 body2...)`，`let`的含义可以理解为**定义一个过程并用一组参数调用该过程**。需要注意三点：
-    + 声明的变量`var`，只在`body`中可见，在expr中是不可见的，这意味着`expr`中使用普通递归不可行。
+**{:}** let绑定的一般形式`(let [name] ((var expr) ...) body1
+body2...)`，`let`的含义可以理解为**定义一个过程并用一组参数调用该过程**。需要注意三点：
+
++ 声明的变量`var`，只在`body`中可见，在expr中是不可见的，这意味着`expr`中使用普通递归不可行。
     
 ```错误：
 (let ((sum (lambda (ls) 
@@ -343,7 +401,7 @@ car和cdr分别是寄存器地址部分（Contents of the Address part of the Re
           1
           (* n (factorial (- n 1))))))
 (factorial 4)
-等价于：
+
 (let factorial ((n 3)) 
   (if (= n 0)
       1
@@ -353,7 +411,9 @@ car和cdr分别是寄存器地址部分（Contents of the Address part of the Re
 以下几种形式等价：
 
 + `(let [name] ((var expr) ...) body1 body2...)`
+
 + `((letrec ((name (lambda (var...) body1 body2...))) name) expr ...)`
+
 + `(letrec ((name (lambda (var...) body1 body2...))) (name expr...))`
 
 可以看出，带name的let相当于是将name变量作为一个参数传递，name变量本身引用lambda过程。
@@ -403,27 +463,33 @@ car和cdr分别是寄存器地址部分（Contents of the Address part of the Re
     1. 求值表达式本身。
     2. 决定改值接下来**如何被处理**。这一步使用**Continuation**称谓。
     
-**{:}** `call/cc`用于获取**当前continuation**，并将其作为另一个函数f传入参数，同时调用f。[注：在R5RS标准中，实际定义的过程名为`call-with-current-continuation`，但是很多scheme环境中都可简化为`call/cc`]
+**{:}** `call/cc f`用于获取**当前continuation**，并将其作为另一个函数f的传入参数，同时调用f。[注：在R5RS标准中，实际定义的过程名为`call-with-current-continuation`，但是很多scheme环境中都可简化为`call/cc`]
 
-理解Continuation的关键在于:
+<blockquote>
+
+#### continuation概念核心:
  
 1. continution代表“程序接下来做什么”，其表现形式为**过程函数**[即continuation可如函数一样被调用]。
- 
+
 2. continuation代表的是程序执行过程中的某个**动态点(快照)**，而非**静态点**。因此其隐含两部分：a) 当前上下文环境；b) 接下来的执行语句。
 
 3. `call/cc`不是continuation，`call/cc`是过程函数[注:lambda中任何函数均有返回值]，用于在scheme中获取**当前continuation**。`call/cc`的返回值决定于f内调用continuation时是否带有传入参数： 
 
 + 带有传入参数，那么该传入参数就是call/cc的返回值。
+
 + 没有传入参数，那么continuation本身作为call/cc的返回值。
-+ 如果没有在f内部没有调用continuation，那么f本身的返回值即为call/cc的返回值。
+
++ 如果在f内部没有调用continuation，那么f本身的返回值即为call/cc的返回值。
       
 ```
 (call/cc (lambda (k) "unicorn"))    ; 返回值为"unicorn"
 (call/cc (lambda (k) k))            ; 返回值为continuation本身
 (call/cc (lambda (k) 1))            ; 返回值为1
 ```
+
+#### continuation调用方式
   
-a) 在f内部调用continuation
+**第一种情况：在f内部调用continuation**
 
 现有的执行流被挂起，被调用的continuation所对应的执行流被恢复(相当于goto到call/cc的程序语句处)，调用这个continuation时的**传入参数**则作为创建它的call/cc(本身也是个函数过程)的返回值(如果调用continuation时没有传入参数，则将continuation本身作为返回值)。
    
@@ -453,7 +519,7 @@ a) 在f内部调用continuation
  
 6.程序执行"zero"，求值并打印。
 
-b) 在f外部调用continuation
+**第二种情况：在f外部调用continuation**
 
 最重要搞清楚continuation所代表的含义，是否有输入参数。
 
@@ -494,6 +560,8 @@ factorial(4)       ; return
 其实，每个函数的返回，都隐含一个continuation；而call/cc的作用就是显示获取continuation。Continuation可以被用来实现多线程、协程、显示回溯等。
 
 由于C系语言(如C、Java等等)，通常在语言层面屏蔽了这一概念，因此，学习起来确实比较抽象啊:(。如果希望以C的视角来理解continuation，可以看看[call-with-current-continuation-for-C-programmers][1]。
+
+</blockquote>
 
 **{:}** CPS(continuation passing style)是一种基于continuation思想(并不一定基于scheme中的continuation，当然也就不一定基于call/cc)的编程风格。它并不局限于某种语言平台。可以这样理解，CPS风格的程序可以看做是**一系列函数的串行传递和执行**。
 
