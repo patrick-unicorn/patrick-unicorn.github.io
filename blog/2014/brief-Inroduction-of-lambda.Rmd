@@ -1,36 +1,47 @@
-**声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@gmail.com>
+---
+author: "patrick.unicorn"
+date: "2014年06月03日"
+output: 
+  html_document:
+    theme: null
+    highlight: null
+    css: ../css/main.css
+---
+
+简明Lambda算子介绍
+===
+
+**声明：** 本篇是经典论文[《The Lambda Calculus - A Brief Introduction》][0]的翻译。
 
 * * *
 
-> **Lambda中一切都是函数，包括数字(指整数)。**
+<q> **Lambda中一切都是函数，包括数字(指整数)。** </q>
 
-本篇与前一篇一样，是一篇经典的论文[《The Lambda Calculus - A Brief Introduction》][0], 仍然是为了深入理解Scheme相关范畴的内容，所附带学习的基础性知识。第一次接触Lambda是在C#语言中，当时的第一印象是一种“匿名函数”，除此之外，对其背后的数学思想也并未深究。再到后来，逐渐接触到了[函数式编程][1]概念，了解到了其背后的数学思想就是[Lambda算子][2]，并进行了初步的了解，但也是不求甚解。这次在翻看Scheme相关的资料（书籍、论文等）时，感觉是时候深入的理解下其数学意义了。本文是一篇导论性质的文章，有很强的前后依赖性，因此不能跳读，只能按序阅读章节，并需要具备一定的数学基础(高中程度就可以了)和某种语言中的Lambda使用经验(如Java8/C#/Scheme等等)，才能比较好的理解。另外由于文中有很多数理概念的英语单词，为了保证正确性(中文翻译出来总感觉挺别扭的)，我都进行了保留。下面是译文（不断修正完善中）：
+第一次接触Lambda是在C#语言中，当时的第一印象是简化的“匿名函数”，除此之外，对其背后的数学思想也并未深究。再到后来，逐渐接触到了[函数式编程][1]概念，了解到了其背后的数学思想就是[Lambda算子][2]，并进行了初步的了解，但也是不求甚解。这次在翻看Scheme相关的资料时，感觉是时候深入的理解下其数学意义了。本文是一篇导论性质的文章，有很强的前后依赖性，因此不能跳读，只能按序阅读章节，并需要具备一定的数学基础(初中以上)和某种编程语言中的Lambda使用经验(如Java8/C#/Scheme等等)，才能比较好的理解。文中有很多数理概念的英语单词我都进行了保留。下面是译文：
 
 <!--more-->
 
-* * *
+## Chapter 1 Introduction(介绍)
 
-# Chapter 1 Introduction(介绍)
-
-## 1.1 Origin(起源)
+### 1.1 Origin(起源)
 
 **Lambda Calculus**是美国逻辑学家**Alonzo Church**在1930年代发明的，并于1941年在论文**《The Calculi of Lambda Con-version》**中理论化。
 
 Alonzo Church本意是创建形式化的数理逻辑系统，并未曾想到去创建一种编程语言。事实上，直到计算机编程产生后，这一理论与编程之间的关系才被发现。
 
-## 1.2 Definition(定义)
+### 1.2 Definition(定义)
 
 > 定义1
 >
 > Lambda Calculus定义了一套**Lambda表达式**变换和形式化的规则。
 
-## 1.3 Literature(文献)
+### 1.3 Literature(文献)
 
 Lambda算子作为一套数理逻辑系统，[Bar81]中以简明的方式详细解释了其内涵，另外，[Sto81]中提供了可读性更好的的表述。Curry和Fey在他们的书[CF58]中叙述了Lambda算子的一些历史成因和基本属性。这一观点是基于[Jon87]的第23页。
 
 在[Jon87]、[Kam90]、[Cha96]中，从程序员的视角对Lambda算子进行了探讨。
 
-# Chapter2 Syntax of Lambda Expression(Lambda表达式的语法)
+## Chapter2 Syntax of Lambda Expression(Lambda表达式的语法)
 
 Lambda表达式中的语法定义如下：
 
@@ -84,11 +95,11 @@ var f3 = function(p1) {
 f3(1)(2)(3); // output: 6
 </pre>
 
-# Chapter 3 Basic Rules for Lambda Conversions(Lambda变换的基本规则)
+## Chapter 3 Basic Rules for Lambda Conversions(Lambda变换的基本规则)
 
-## 3.1 Notation used in Conversion Rules(变换的符号记法) 
+### 3.1 Notation used in Conversion Rules(变换的符号记法) 
 
-### 3.1.1 Notation used to specify conversion of lambda expressions(lambda表达式变换中的符号记法)
+#### 3.1.1 Notation used to specify conversion of lambda expressions(lambda表达式变换中的符号记法)
 
 > 记法1(变换操作符)
 >
@@ -98,7 +109,7 @@ f3(1)(2)(3); // output: 6
 >
 > 箭头线`→`、`←`、`↔`附带的希腊字符(此处为α)代表了应用的变换类型
 
-### 3.1.2 Notation used to specifiy substitution(代换的符号记法)
+#### 3.1.2 Notation used to specifiy substitution(代换的符号记法)
 
 > 记法2(代换操作符)
 >
@@ -106,9 +117,9 @@ f3(1)(2)(3); // output: 6
 > + M[x ← N]     用x代换M中的N
 > + M[x ↔ N]     双向代换
 
-## 3.2 Alpha Conversion(α变换)
+### 3.2 Alpha Conversion(α变换)
 
-### 3.2.1 Bound and Free Variables(绑定变量和自由变量)
+#### 3.2.1 Bound and Free Variables(绑定变量和自由变量)
 
 > 定义3(绑定变量和自由变量)
 > 
@@ -116,7 +127,7 @@ f3(1)(2)(3); // output: 6
 >
 > `y`是自由变量，而`x`是绑定变量。自由变量的值从高层(外部)的Lambda表达式中获取。
 
-### 3.2.2 Rules of Alpha Conversion(α变换规则)
+#### 3.2.2 Rules of Alpha Conversion(α变换规则)
 
 Lambda表达式的α变换定义如下：
 
@@ -136,11 +147,11 @@ Lambda表达式的α变换定义如下：
 
 α的第三条规则是前两条的综合。在Lambda表达式内部进行置换时，α变换法则是必须的。
 
-## 3.3 Beta Conversion(β变换)
+### 3.3 Beta Conversion(β变换)
 
 β变换包含两个过程变换：β-Reduction和β-Abstraction。前者是指将**Lambda Abstraction**内部的绑定变量用函数的(实)参数代换的过程。后者是指逆过程，即将经过β-Reduction后的表达式还原为原Lambda表达式的过程。
 
-### 3.3.1 Rule of β-Conversion(β变换规则)
+#### 3.3.1 Rule of β-Conversion(β变换规则)
 
 > 规则4(β变换)
 >
@@ -152,7 +163,7 @@ Lambda表达式的α变换定义如下：
 >
 > 左侧的`((λx.M)N)`是一个application[参看定义2]，其内部的`λx.M`是一个abstraction[参看定义2]；右侧是一个substitution[参看记法2]。
 
-### 3.3.2 β-Reduction
+#### 3.3.2 β-Reduction
 
 **Reducible Expression(可约表达式) ‘redex’** β-reduction可以仅被用于可约的表达式。可约表达式简称为‘redex’，其定义如下：
 
@@ -170,7 +181,7 @@ Lambda表达式的α变换定义如下：
 >
 > ((λx.M)N) →<sup>β</sup> M[x → N] 
 
-### 3.3.3 β-Abstraction
+#### 3.3.3 β-Abstraction
 
 **Rule of β-Abstraction**
 
@@ -195,7 +206,7 @@ Lambda表达式的α变换定义如下：
 
 > 译注：β变换的意义在于，函数调用等价于将函数体中的参数使用参数值替代。以多项式为例，对于函数`f(y)=2*y + 1`，有`f(2) <=> 2*2 + 1`。
 
-## 3.4 Eta Conversion(η变换)
+### 3.4 Eta Conversion(η变换)
 
 与β变换一样，η变换同样包含了从左到右和从右到左两个过程。
 
@@ -208,7 +219,7 @@ Lambda表达式的α变换定义如下：
 >
 > (λx.Mx) ↔<sup>η</sup> M, x在M中不能是自由变量(即为绑定变量)
 
-### 3.4.1 η-Reduction
+#### 3.4.1 η-Reduction
 
 η-reduction用于消除冗余的**lambda abstraction**[参看定义2]。具体的解释如下：
 
@@ -233,7 +244,7 @@ public void g(x, y, z) {
 >
 > (λx.Mx) →<sup>η</sup> M, x在M中不能使自由变量(即为绑定变量)
 
-### 3.4.2 η-Abstraction
+#### 3.4.2 η-Abstraction
 
 η-abstraction用于在**及早求值(eager evaluation)**的语言中为lambda表达式创建一个包装。在**惰性求值(lazy evaluation)**的语言中，如Lambda Calculus、A++、SML、Haskell、Miranda等，η-abstraction和η-reduction主要被用于编译器内部。
 
@@ -243,9 +254,9 @@ public void g(x, y, z) {
 >
 > (λx.Mx) ←<sup>η</sup> M, x在M中不能使自由变量(即为绑定变量)
 
-## 3.5 Rule上 of Associativity(交换规则)
+### 3.5 Rule上 of Associativity(交换规则)
 
-### 3.5.1 Rule of Associativity for Abstraction(Abstraction结合规则)
+#### 3.5.1 Rule of Associativity for Abstraction(Abstraction结合规则)
 
 > 规则10(Abstraction结合规则)
 >
@@ -253,7 +264,7 @@ public void g(x, y, z) {
 
 **Example**: 表达式`λx.λy.λz.M`等价于`λxyz.M`。
 
-### 3.5.2 Rule of Associativity for Application(Application结合规则)
+#### 3.5.2 Rule of Associativity for Application(Application结合规则)
 
 > 规则11(Application结合规则)
 >
@@ -261,11 +272,11 @@ public void g(x, y, z) {
 
 **Example**: 表达式`((MN)P)`等价于`(MNP)`。
 
-### 3.5.3 Example for both rules(同时应用两种规则的例子):
+#### 3.5.3 Example for both rules(同时应用两种规则的例子):
 
 `λx.λy.((xy)z))等价于`λxy.xyz`。
 
-## 3.6 Y-Combinator(Y协变器)
+### 3.6 Y-Combinator(Y协变器)
 
 Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它，就可以处理Lambda算子中的递归函数了[**引入Y-Combinator的终极目的**]。
 
@@ -277,7 +288,7 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
 >
 > Y = λf.((λx.(f(x x))))(λx.(f(x x)))
 
-### 3.6.2 Basic Usage of Y-Combinator(Y-Combinator基本使用)
+#### 3.6.2 Basic Usage of Y-Combinator(Y-Combinator基本使用)
 
 **Fixpoint of a Function** 如果满足(M N) =<sup>β</sup> N为true，那么N就称为M的“fixpoint”。
 
@@ -319,13 +330,13 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
 >
 > **译注：**第一步中，直接用Y的定义替代`Y`，并应用β-reduction变换，此时Y(`λf.((λx.(f(x x))))(λx.(f(x x)))`)中的绑定变量`f`全部代换为`M`；第二步中，第一个`λx.(M(x x))`作为β-reduction定义中的`λx.M`，第一个`λx.(M(x x))`作为β-reduction定义中的`N`；第三步中，对(λx.(M(x x)))(λx.(M(x x)))应用β-abstraction。
 
-### 3.6.3 Using the Y-Combinator to implement recursion
+#### 3.6.3 Using the Y-Combinator to implement recursion
 
 **Introduction** 下面是经典的阶乘的递归问题，用于测试Y-combinator。
 
 为了简化过程，我们把函数`IF`、`=`、`*`、`-`作为预定义的**lambda abstraction[参看定义2]**，同时假定所有的自然数都是可以获取的值。将这些预定义在Lambda算子中实现并不至于太难，这里只是为了简化问题，使我们聚焦于**Using the Y-Combinator to implement recursion**这一主题。
 
-> 如何使用Lambda算子实现`+`?
+> 使用Lambda算子实现加号`+`
 > 
 > 最简单直观的方式，把`+`当做一个**两参函数**: `λx.λy.x+y` <=> `λxy.x+y`，问题是显而易见，函数体中的`+`引用了自身；为了解决消除这一递归定义矛盾，很自然我们会想到Y-Combinator，因此Y-Combinator就是解决Lambda算子中递归问题而引入的。下面是具体的过程：
 > 
@@ -421,7 +432,7 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
 
 `1`
 
-# Bibliography(参考书目)
+## Bibliography(参考书目)
 
 [Bar81] H. Barendregt. The Lambda Calculus  Its Syntax and Semantics. North-Holland,
 Amsterdam, 1981.
@@ -445,5 +456,3 @@ Prentice Hall International, Hertfordshire,HP2 7EZ, 1987. ISBN 0 13 453325 9.
 [3]: http://zh.wikipedia.org/wiki/%E6%9F%AF%E9%87%8C%E5%8C%96
 [4]: http://mindhacks.cn/2006/10/15/cantor-godel-turing-an-eternal-golden-diagonal/
 
-
-[mathjax]
