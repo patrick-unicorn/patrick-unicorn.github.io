@@ -324,7 +324,11 @@ CPS函数都有一个额外的参数ret，表示当前函数结束之后需要�
 + [《Teach Yourself In FixNum Days》][5]
 + [Continution](http://en.wikipedia.org/wiki/Continuation)
 
-> 有一点需要注意下，《The SchemeProgramming Language》中例子为了表达清晰，约定了一些不属于R5RS规范的表示方法，所以，在运行其例子的时候，需要部分修正。比如：使用`[]`的地方应该被替换为`()`等等。
+<blockquote>
+
+有一点需要注意下，《The SchemeProgramming Language》中例子为了表达清晰，约定了一些不属于R5RS规范的表示方法，所以，在运行其例子的时候，需要部分修正。比如：使用`[]`的地方应该被替换为`()`等等。
+
+</blockquote>
 
 [1]:http://www.sublimetext.com/
 [2]:http://www.gnu.org/software/mit-scheme/
