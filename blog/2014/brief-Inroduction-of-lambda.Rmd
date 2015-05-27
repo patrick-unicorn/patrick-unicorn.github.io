@@ -11,7 +11,7 @@ output:
 简明Lambda算子介绍
 ===
 
-**声明：** 本篇是经典论文[《The Lambda Calculus - A Brief Introduction》][0]的翻译。
+**声明：** 本篇是[《The Lambda Calculus - A Brief Introduction》][0]的翻译。
 
 * * *
 
@@ -56,16 +56,18 @@ Lambda表达式中的语法定义如下：
 由此，Lambda算子包含三种不同类型的Lambda表达式:
 
 + **variables - 变量(用于引用Lambda表达式)**
-+ **lambda Abstraction - Lambda抽象(用于定义函数)**
++ **lambda abstraction - Lambda抽象(用于定义函数)**
 + **applications - 应用(用于调用函数)**
 
 **Remarks(附注)**：
 
 其中application中的`()`并非必须的。使用`()`主要是因为后面即将阐述的application的结合律。
 
-> **译注：**
->
-> 对于第二条要有必要提醒的是，其只规定了**一个参数**的lambda表达式(函数)，那么很自然地，我们要问“多参数函数”怎么办呢？如果接触过Javascript语言，很自然地会想到[Curry(柯里化)][3]，在这一方式中所蕴含的基本思想是“程序即数据”，具体的说就是，**N参函数**可以表述为返回**N-1参函数的函数**的重复应用(调用)，即函数可以像“数据一样”被返回。下面以一个三参函数(javascript)为例说明上述思想：
+<blockquote>
+
+**译注：**
+
+对于第二条要有必要提醒的是，其只规定了**一个参数**的lambda表达式(函数)，那么很自然地，我们要问“多参数函数”怎么办呢？如果接触过Javascript语言，很自然地会想到[Curry(柯里化)][3]，在这一方式中所蕴含的基本思想是“程序即数据”，具体的说就是，**N参函数**可以表述为返回**N-1参函数的函数**的重复应用(调用)，即函数可以像“数据一样”被返回。下面以一个三参函数(javascript)为例说明上述思想：
 
 <pre>
 三参函数调用：
@@ -94,6 +96,8 @@ var f3 = function(p1) {
 };
 f3(1)(2)(3); // output: 6
 </pre>
+
+</blockquote>
 
 ## Chapter 3 Basic Rules for Lambda Conversions(Lambda变换的基本规则)
 
@@ -225,6 +229,8 @@ Lambda表达式的α变换定义如下：
 
 如果**lambda abstraction**的唯一目的是将它的参数传递给另一个函数，那么该**lambda abstraction**就是冗余的，并可以对其应用η-reduction。
 
+> **译注：**
+>
 > 用Java程序语言的方式可以表述为，如果函数f内部仅仅是调用了另外一个函数时，那么函数f是可消除的。如下：
 >
 > <pre>
@@ -274,13 +280,13 @@ public void g(x, y, z) {
 
 #### 3.5.3 Example for both rules(同时应用两种规则的例子):
 
-`λx.λy.((xy)z))等价于`λxy.xyz`。
+`λx.λy.((xy)z))`等价于`λxy.xyz`。
 
 ### 3.6 Y-Combinator(Y协变器)
 
 Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它，就可以处理Lambda算子中的递归函数了[**引入Y-Combinator的终极目的**]。
 
-在许多编程语言中，函数内部调用自身(即递归调用)可以简单地使用函数名。这被称为隐式递归，但是这点再Lambda算子中是不能实现的，因为Lambda算子中所有的**lambda abstraction**均为匿名函数。
+在许多编程语言中，函数内部调用自身(即递归调用)可以简单地使用函数名。这被称为隐式递归，但是这点在Lambda算子中是不能实现的，因为Lambda算子中所有的**lambda abstraction**均为匿名函数。
 
 > 定义5(Y-Combinator)
 >
@@ -298,11 +304,13 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
 
 按照H.Curry的表述，对于M，存在一个函数可以生成M的fixpoint。这个函数就是上面定义的Y-Combinator。
 
-> **译注：关于**不动点**以及**Y-Combinator**的详细说明可参考[《康托尔、哥德尔、图灵——永恒的金色对角线(rev#2)》][4]。
+> **译注：**
+>
+> 关于不动点以及Y-Combinator的详细说明可参考[《康托尔、哥德尔、图灵——永恒的金色对角线(rev#2)》][4]。
 
 > 定义6(Fixpoint of A Function)
 >
-> (MN) →<sup>β</sup> N
+> (M N) →<sup>β</sup> N
 
 根据上面的定义，函数的fixpoint可以被看做一个lambda表达式，如果把该表达式作为参数传递给函数，那么函数又会返回该表达式。
 
@@ -328,7 +336,13 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
         →<sup>β</sup> (M((λx.(M(x x)))(λx.(M(x x)))))
         →<sup>β</sup> (M(Y M))
 >
-> **译注：**第一步中，直接用Y的定义替代`Y`，并应用β-reduction变换，此时Y(`λf.((λx.(f(x x))))(λx.(f(x x)))`)中的绑定变量`f`全部代换为`M`；第二步中，第一个`λx.(M(x x))`作为β-reduction定义中的`λx.M`，第一个`λx.(M(x x))`作为β-reduction定义中的`N`；第三步中，对(λx.(M(x x)))(λx.(M(x x)))应用β-abstraction。
+> **译注：**
+>
+> 第一步中，直接用Y的定义替代`Y`，并应用β-reduction变换，此时Y(`λf.((λx.(f(x x))))(λx.(f(x x)))`)中的绑定变量`f`全部代换为`M`；
+>
+> 第二步中，第一个`λx.(M(x x))`作为β-reduction定义中的`λx.M`，第一个`λx.(M(x x))`作为β-reduction定义中的`N`；
+>
+> 第三步中，对(λx.(M(x x)))(λx.(M(x x)))应用β-abstraction。
 
 #### 3.6.3 Using the Y-Combinator to implement recursion
 
@@ -336,12 +350,11 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
 
 为了简化过程，我们把函数`IF`、`=`、`*`、`-`作为预定义的**lambda abstraction[参看定义2]**，同时假定所有的自然数都是可以获取的值。将这些预定义在Lambda算子中实现并不至于太难，这里只是为了简化问题，使我们聚焦于**Using the Y-Combinator to implement recursion**这一主题。
 
+> **译注：**
+>
 > 使用Lambda算子实现加号`+`
 > 
-> 最简单直观的方式，把`+`当做一个**两参函数**: `λx.λy.x+y` <=> `λxy.x+y`，问题是显而易见，函数体中的`+`引用了自身；为了解决消除这一递归定义矛盾，很自然我们会想到Y-Combinator，因此Y-Combinator就是解决Lambda算子中递归问题而引入的。下面是具体的过程：
-> 
-> `λx.λy.x+y` => `λxy.x y` => `
-> 
+> 最简单直观的方式，把`+`当做一个**两参函数**: `λx.λy.x+y` <=> `λxy.x+y`，问题是显而易见，函数体中的`+`引用了自身；为了解决消除这一递归定义矛盾，很自然我们会想到Y-Combinator，因为Y-Combinator就是解决Lambda算子中递归问题而引入的。
 
 **Steps to Eliminate Implicit Recursion** 
 
