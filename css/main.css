@@ -114,3 +114,17 @@ img {
 hr {
     color: LightGrey;
 }
+
+table, th, td  {
+  border-collapse: collapse;
+  border: solid 1px black;
+}
+
+th {
+    text-align: center;
+}
+
+td {
+    padding: 5px;
+    text-align: left;    
+}
