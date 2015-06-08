@@ -31,7 +31,7 @@ output:
 
 |-----|------|
 |`@Inject @Autowired`|1. 按类型匹配； 2. 按`@Qualified`进一步过滤和匹配；3. 按名称匹配|
-|`@Resource`|1. 按名称匹配；2. 按类型匹配；3. 按`@Qualified`进一步过滤和匹配（如果已经按照名称匹配到，则`@Qualified`的限制忽略|
+|`@Resource`|1. 按名称匹配；2. 按类型匹配；3. 按`@Qualified`进一步过滤和匹配（如果已经按照名称匹配到，则`@Qualified`的限制忽略）|
 
 ## id & name
 
