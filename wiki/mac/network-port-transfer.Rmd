@@ -5,7 +5,7 @@ output:
   html_document:
     theme: null
     highlight: null
-    css: ../../css/main.css
+    css: ../../blog/css/main.css
 ---
 
 # MAC OS 10.10设置转发80端口
