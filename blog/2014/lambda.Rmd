@@ -360,7 +360,7 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
 
 + 包含不合法的隐式递归[**译注：**指使用了不支持的命名函数]的计算阶乘的递归函数
 
-`FAC = λn.(IF(= n 0) 1 (* n (FAC(- n 1))))`
+```FAC = λn.(IF(= n 0) 1 (* n (FAC(- n 1))))```
 
 + 不合法的隐式递归
 

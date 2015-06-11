@@ -35,6 +35,7 @@ Scheme Basics (1)
 大多数的编程语言都采用的是静态作用域，如C/Java/C#/Scheme/javascript等等；而有些语言采用动态作用域，比如[newLISP][2],有些语言同时支持两种作用域，比如Perl。
 
 下面是一个C的例子：
+
 ```
 int x = 1;
 int g(int z) { return x + z; }
