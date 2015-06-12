@@ -360,90 +360,130 @@ Y-combinator也称为**fixpoint combinator**，是H.Curry发明的。有了它�
 
 + 包含不合法的隐式递归[**译注：**指使用了不支持的命名函数]的计算阶乘的递归函数
 
-```FAC = λn.(IF(= n 0) 1 (* n (FAC(- n 1))))```
+```
+FAC = λn.(IF(= n 0) 1 (* n (FAC(- n 1))))
+```
 
 + 不合法的隐式递归
 
-`FAC = λn.(...FAC...)`
+```
+FAC = λn.(...FAC...)
+```
 
 + 去除不合法的隐式递归
 
-`FAC = (λfac.λn.(...fac...)FAC)`
+```
+FAC = (λfac.λn.(...fac...)FAC)
+```
 
 + 简化形式
 
-`FAC = (M FAC), 其中M = λfac.λn.(...fac...)`
+```
+FAC = (M FAC), 其中M = λfac.λn.(...fac...)
+```
 
 通过将递归函数封闭为一个lambda abstraction消除了递归， 该lambda abstraction接受被递归访问的函数作为参数。
 
 + 应用**定义12**后，步骤4结果中的FAC可以认为是M的fixpoint，因此，我们可以写为如下形式：
 
-`FAC = (Y M)`
+```
+FAC = (Y M)
+```
 
 > **译注：**这一步真正消除了递归
 
 + 计算阶乘的函数现在可以被写为：
 
-`FAC = (Y λfac.λn.(...fac...))`
+```
+FAC = (Y λfac.λn.(...fac...))
+```
 
 + 计算n的阶乘的表达式如下：
 
-`(Y λfac.λn.(...fac...)n)`
+```
+(Y λfac.λn.(...fac...)n)
+```
 
 **Examples of Step by Step Evaluation**
 
 + 预定义变量
 
-`FAC = (Y M)`
-`M = λfac.λn.(IF(= n 0)1(* n (fac(- n 1))))`
+```
+FAC = (Y M)
+M = λfac.λn.(IF(= n 0)1(* n (fac(- n 1))))
+```
 
 + 表达式求值
 
-`(FAC 1)`
+```
+(FAC 1)
+```
 
 + 使用FAC重写表达式，FAC是(Y M)，M是一个fixpoint
 
-`((Y M)1)`
+```
+((Y M)1)
+```
 
 + 应用规则12重写biaodashi
 
-`((M(Y M))1)`
+```
+((M(Y M))1)
+```
 
 + 替换第一个M
 
-`((λfac.λn.(IF(= n 0)1(* n (fac(- n 1))))(Y M))1)`
+```
+((λfac.λn.(IF(= n 0)1(* n (fac(- n 1))))(Y M))1)
+```
 
 + 应用β-reduction变换，用参数(Y M)代换lambda abstraction中的变量fac
 
-`(λn.(IF(= n 0)1(* n ((Y M)(- n 1))))1)`
+```
+(λn.(IF(= n 0)1(* n ((Y M)(- n 1))))1)
+```
 
 + 应用β-reduction变换，用参数1代换lambda abstraction中的变量n
 
-`(IF(= n 0)1(* 1 ((Y M)(- 1 1))))`
+```
+(IF(= n 0)1(* 1 ((Y M)(- 1 1))))
+```
 
 + 根据条件，选择并计算IF表达式的分支
 
-`(* 1 ((Y M)0))`
+```
+(* 1 ((Y M)0))
+```
 
 + 应用规则12，用(M(Y M))代换(Y M)
 
-`(* 1 ((M(Y M))0))`
+```
+(* 1 ((M(Y M))0))
+```
 
 + 用M的值替换第一个M
 
-`(* 1 ((λfac.λn.(IF(= n 0)1(* n (fac(- n 1))))(Y M))0))`
+```
+(* 1 ((λfac.λn.(IF(= n 0)1(* n (fac(- n 1))))(Y M))0))
+```
 
 + 应用β-reduction变换，用参数(Y M)代换fac
 
-`(* 1 (λn.(IF(= 0 0)1(* n ((Y M)(- n 1)))))0)`
+```
+(* 1 (λn.(IF(= 0 0)1(* n ((Y M)(- n 1)))))0)
+```
 
 + 计算IF表达式
 
-`(* 1 1)`
+```
+(* 1 1)
+```
 
 + 计算*表达式
 
-`1`
+```
+1
+```
 
 ## Bibliography(参考书目)
 
