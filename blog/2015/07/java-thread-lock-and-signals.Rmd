@@ -76,7 +76,7 @@ class Ex {
 }
 ```
 <blockquote>
-为什么必须持有**协调对象**monitor，才可以调用其wait/notify[all]?
+#### 为什么必须持有**协调对象**monitor，才可以调用其wait/notify[all]?
 
 线程之间通过对象的wait/notify[all]方法进行协作，那么，该对象必然是“共享资源”，面临竞争性使用，因此，获取该对象的Monitor就理所当然成为使用其方法wait/notify[All]的先决条件了。
 </blockquote>
@@ -97,26 +97,64 @@ public final synchronized void join(long millis)
 
 + 性能低
 
-`Synchronized`底层的实现机制（*JDK1.5以前*）导致锁的性能成本太高。
+synchronized底层的实现机制（*JDK1.5以前*）导致锁的性能成本太高。
 
 + 不灵活
 
 <blockquote>
-1. `Synchronized`不能跨方法使用，即不能在A方法中加锁，而在B方法中解锁。
-2. `Synchronized`加锁会导致不可中断的阻塞。
+1. synchronized不能跨方法使用，即不能在A方法中加锁，而在B方法中解锁。
+2. synchronized加锁会导致不可中断的阻塞。
 </blockquote>
 
 + 不完备
 
 <blockquote>
 1. 从上面的表述中，我们可以看到**锁**和**协调对象**之间是具有明显关联的。而**Syncrhonized & Wait/Notify**机制中，对这一关联并未有显著的设定，设计上并不完备。
-2. **Wait/Notify**的协作机制过于单调，无法直接完成复杂的线程协作。
+2. wait/notify的协作机制过于单调。
+3. synchronized由于是语言特性，无法扩展。
+4. 不支持锁公平性
 </blockquote>
 
 ### Lock
 
-#### Advantage
+<blockquote>
+#### 锁的可重入性
+
+如果线程A已经获取了锁对象L，当A线程（释放L之前）再次获取锁对象L，如果可以获取，则为**可重入锁**；否则，为**不可重入**。synchronized支持可重入。
+
+#### 锁的公平性
+
+如果锁获取的顺序严格遵从于线程申请的顺序，那么，即为公平锁；否则，为不公平锁。synchronized不支持公平锁。
+</blockquote>
+
+Lock的典型使用形式：
+
+```
+lock.lock();
+try{
+	//do critical section code,
+	//which may throw exception
+} finally {
+	lock.unlock();
+}
+```
+
++ ReentrantLock
+
+synchronized关键字的直接替代者。
+
++ ReadWriteLock
+
+支持单独的读写锁。
+
++ StampedLock
+
+增强版的读写锁。锁的状态包含一个“邮戳”，其实就是进一步降低了锁的粒度。
+
+
+
 
 ### Condition
 
-#### Advantage
+Condition相当于将之前设定在Object中的wait/notify抽取到了单独的对象中。通过`Lock#newCondition`生成实例。每个Condition是与具体的Lock对象相关联的。
+
