@@ -8,17 +8,41 @@ output:
     theme: null
 ---
 
-# Java线程中的锁和信号机制
+Java线程中的锁和信号机制
+===
 
-## Object Monitor
+- - -
 
-### 获取Monitor的方式
+## Thread
 
-+ Synchronized
+Java中基本的并发机制就是多线程。线程是程序执行的最小单位。多线程编程最困难的地方就在于处理**共享资源**的竞争性访问。
 
-+ Lock
+### Daemon
 
-### 线程协作原语
+Java中线程分为守护线程（Daemon）和用户线程（User）。两者的区别如下：
+
++ 守护线程是为用户线程服务的，它的优先级为低。
+
++ 守护线程的生命周期依赖于外部的用户线程。
+
+当JVM中的用户线程都结束后，系统会退出（守护线程自然也会被终结）。通常在守护线程中，不应放入过多的用户逻辑，因为守护线程的结束依赖于外部用户线程生命周期，因此，无法预知其执行的时机，有可能造成潜在的错误。
+
+```
+Thread t = new Thread(...);
+// 必须在线程启动之前设置
+t.setDaemon(true);
+t.start();
+```
+
+## Monitor
+
+每个对象都伴随一个监控器对象（monitor），该对象的作用是
+
+## Synchronized & Wait/Notify
+
+### Synchronized
+
+### Wait/Notify
 
 + wait
 
@@ -57,4 +81,14 @@ class Ex {
 线程之间通过对象的wait/notify[all]方法进行协作，那么，该对象必然是“共享资源”，面临竞争性使用，因此，获取该对象的Monitor就理所当然成为使用其方法wait/notify[All]的先决条件了。
 </blockquote>
 
-## Thread Join
+### Thread Join
+
+## Lock & Condition
+
+### Lock
+
+#### Advantage
+
+### Condition
+
+#### Advantage
