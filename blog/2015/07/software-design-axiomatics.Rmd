@@ -1,11 +1,12 @@
 ---
 author: "patrick.unicorn"
 date: "July 23, 2015"
-output: 
+output:
+  pdf_document: default
   html_document:
-    theme: null
-    highlight: null
     css: ../../css/main.css
+    highlight: null
+    theme: null
 ---
 
 # 软件设计的公理体系

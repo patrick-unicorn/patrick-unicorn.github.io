@@ -1,0 +1,60 @@
+---
+author: "patrick.unicorn"
+date: "July 28, 2015"
+output:
+  html_document:
+    css: ../../css/main.css
+    highlight: null
+    theme: null
+---
+
+# Java线程中的锁和信号机制
+
+## Object Monitor
+
+### 获取Monitor的方式
+
++ Synchronized
+
++ Lock
+
+### 线程协作原语
+
++ wait
+
++ notify[All]
+
+**关键点：**
+
++ 均定义在Object基类上
+
++ 是一组协作方法，必须配对使用
+
++ 当前线程必须持有对象的Monitor时，才能调用
+
+```
+class Ex {
+    public static void main(String[] args) {
+		Object L = new Object();
+		try {
+		    // 因为此处线程并没有持有对象L的monitor，所以
+		    // 会导致java.lang.IllegalMonitorStateException
+			L.wait(); 
+			
+			// 正确的方式
+			synchronized(L) {
+			    L.wait();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+```
+<blockquote>
+为什么必须持有monitor，才可以调用wait/notify[all]?
+
+线程之间通过对象的wait/notify[all]方法进行协作，那么，该对象必然是“共享资源”，面临竞争性使用，因此，获取该对象的Monitor就理所当然成为使用其方法wait/notify[All]的先决条件了。
+</blockquote>
+
+## Thread Join
