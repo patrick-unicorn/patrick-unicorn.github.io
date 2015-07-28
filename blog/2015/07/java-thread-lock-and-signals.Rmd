@@ -151,10 +151,13 @@ synchronized关键字的直接替代者。
 
 增强版的读写锁。锁的状态包含一个“邮戳”，其实就是进一步降低了锁的粒度。
 
-
-
-
 ### Condition
 
 Condition相当于将之前设定在Object中的wait/notify抽取到了单独的对象中。通过`Lock#newCondition`生成实例。每个Condition是与具体的Lock对象相关联的。
+
+### Application
+
++ CountDownLatch
+
++ CyclicBarrier
 
