@@ -54,7 +54,7 @@ t.start();
 
 + 是一组协作方法，必须配对使用
 
-+ 当前线程必须持有对象的Monitor时，才能调用
++ 当前线程必须持有**协调对象**的Monitor时，才能调用其方法
 
 ```
 class Ex {
@@ -76,14 +76,42 @@ class Ex {
 }
 ```
 <blockquote>
-为什么必须持有monitor，才可以调用wait/notify[all]?
+为什么必须持有**协调对象**monitor，才可以调用其wait/notify[all]?
 
 线程之间通过对象的wait/notify[all]方法进行协作，那么，该对象必然是“共享资源”，面临竞争性使用，因此，获取该对象的Monitor就理所当然成为使用其方法wait/notify[All]的先决条件了。
 </blockquote>
 
-### Thread Join
+### Join
+
+`Thread#Join`方法其实就是对`Object#wait`方法的一个包装：
+
+```
+public final synchronized void join(long millis)
+```
+
+只不过此时的协调对象是Thread本身（`this`)，方法签名中的`synchronized`说明了这点。
 
 ## Lock & Condition
+
+在Java1.5之前，多线程编程只能基于上述的**Syncrhonized & Wait/Notify**机制，其具有明显的弊端：
+
++ 性能低
+
+`Synchronized`底层的实现机制（*JDK1.5以前*）导致锁的性能成本太高。
+
++ 不灵活
+
+<blockquote>
+1. `Synchronized`不能跨方法使用，即不能在A方法中加锁，而在B方法中解锁。
+2. `Synchronized`加锁会导致不可中断的阻塞。
+</blockquote>
+
++ 不完备
+
+<blockquote>
+1. 从上面的表述中，我们可以看到**锁**和**协调对象**之间是具有明显关联的。而**Syncrhonized & Wait/Notify**机制中，对这一关联并未有显著的设定，设计上并不完备。
+2. **Wait/Notify**的协作机制过于单调，无法直接完成复杂的线程协作。
+</blockquote>
 
 ### Lock
 
