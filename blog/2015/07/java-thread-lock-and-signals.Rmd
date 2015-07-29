@@ -42,9 +42,28 @@ Java中每个对象都伴随一个监控器对象（monitor），其概念来自
 
 ### Synchronized
 
+```
+class Ex {
+    private Object L = new Object();
+
+    // 锁对象是Ex.class
+    public static synchronized A() { ... }
+    
+    // 锁对象是当前对象（this）
+    public synchronized A() { ... }
+    
+    public A() {
+        // 锁对象是L
+        synchronized(L) {
+            ...
+        }
+    }
+}
+```
+
 ### Wait/Notify
 
-wait/notify[all]可以简单的理解对Monitor线程队列的操作。
+wait/notify[all]可以简单的理解为对Monitor等待区线程队列的操作。
 
 + wait
 
@@ -218,6 +237,8 @@ CyclicBarrier调用reset方法后可以重用。
 
 1. [Thread Synchronization][1]
 2. [Monitors – The Basic Idea of Java Synchronization][2]
+3. [More flexible, scalable locking in JDK 5.0][3]
 
 [1]: https://www.artima.com/insidejvm/ed2/threadsynch.html
 [2]: http://www.programcreek.com/2011/12/monitors-java-synchronization-mechanism/
+[3]: http://www.ibm.com/developerworks/java/library/j-jtp10264/index.html
