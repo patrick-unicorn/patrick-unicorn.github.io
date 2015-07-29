@@ -55,10 +55,26 @@ t.start();</code></pre>
 <h2>Synchronized &amp; Wait/Notify</h2>
 <div id="synchronized" class="section level3">
 <h3>Synchronized</h3>
+<pre><code>class Ex {
+    private Object L = new Object();
+
+    // 锁对象是Ex.class
+    public static synchronized A() { ... }
+    
+    // 锁对象是当前对象（this）
+    public synchronized A() { ... }
+    
+    public A() {
+        // 锁对象是L
+        synchronized(L) {
+            ...
+        }
+    }
+}</code></pre>
 </div>
 <div id="waitnotify" class="section level3">
 <h3>Wait/Notify</h3>
-<p>wait/notify[all]可以简单的理解对Monitor线程队列的操作。</p>
+<p>wait/notify[all]可以简单的理解为对Monitor等待区线程队列的操作。</p>
 <ul>
 <li>wait</li>
 </ul>
