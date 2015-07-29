@@ -8,7 +8,7 @@ output:
     theme: null
 ---
 
-Java线程中的锁和信号机制
+Java线程同步机制
 ===
 
 - - -
@@ -46,15 +46,13 @@ t.start();
 
 + wait
 
+当前线程进入协调对象（调用wait）的Monitor等待区(wait-set)，不会再被调度执行。
+
 + notify[All]
 
-**关键点：**
+唤醒所有在协调对象（调用notify[All]）Monitor等待区的线程，使其可以被调度执行。
 
-+ 均定义在Object基类上
-
-+ 是一组协作方法，必须配对使用
-
-+ 当前线程必须持有**协调对象**的Monitor时，才能调用其方法
+wait/notify[All]定义在Object基类，它们是一组协作方法，必须配合使用。值得注意的是，当前线程必须先持有**协调对象**的monitor，才能调用它们。
 
 ```
 class Ex {
@@ -83,13 +81,47 @@ class Ex {
 
 ### Join
 
-`Thread#Join`方法其实就是对`Object#wait`方法的一个包装：
+`Thread#Join`方法是对`Object#wait`方法的一个包装，主要是为了方便线程之间协调等待。
 
 ```
+// 注意synchronized
 public final synchronized void join(long millis)
+    throws InterruptedException {
+        long base = System.currentTimeMillis();
+        long now = 0;
+        ...
+        
+        if (millis == 0) {
+            // 判断Thread对象代表的线程是否活跃
+            while (isAlive()) {
+                wait(0);
+            }
+        } else {
+            // 判断Thread对象代表的线程是否活跃
+            while (isAlive()) {
+                long delay = millis - now;
+                if (delay <= 0) {
+                    break;
+                }
+                wait(delay);
+                now = System.currentTimeMillis() - base;
+            }
+        }
+    }
 ```
 
-只不过此时的协调对象是Thread本身（`this`)，方法签名中的`synchronized`说明了这点。
+典型的使用场景：
+
+```
+public static void main(String[] args) {
+    Thread t1 = new Thread(/*某些耗时的动作*/);
+    Thread t2 = new Thread(/*某些耗时的动作*/);
+    
+    //主线程会等待t1和t2线程结束
+    t1.join();
+    t2.join();
+}
+```
 
 ## Lock & Condition
 
@@ -114,6 +146,8 @@ synchronized底层的实现机制（*JDK1.5以前*）导致锁的性能成本太
 3. synchronized由于是语言特性，无法扩展。
 4. 不支持锁公平性
 </blockquote>
+
+因此，Java1.5引入了**Lock & Condition**机制。
 
 ### Lock
 
@@ -159,5 +193,29 @@ Condition相当于将之前设定在Object中的wait/notify抽取到了单独的
 
 + CountDownLatch
 
+<q>
+A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
+</q>
+
+当计数值为0时，(调用了`CountDownLatch#await`)的线程会继续执行。每次调用`CountDownLatch#countDown`，计数值减1。
+
 + CyclicBarrier
 
+<q>
+A synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point.
+</q>
+
+当所有调用`CyclicBarrier#await`方法的线程都结束后：
+
+1. 在最后一个结束的线程中执行`CyclicBarrier#barrierAction`。
+2. 所有线程继续取消阻塞，继续执行。
+
+CyclicBarrier调用reset方法后可以重用。
+
+## References
+
+1. [Thread Synchronization][1]
+2. [Monitors – The Basic Idea of Java Synchronization][2]
+
+[1]: https://www.artima.com/insidejvm/ed2/threadsynch.html
+[2]: http://www.programcreek.com/2011/12/monitors-java-synchronization-mechanism/
