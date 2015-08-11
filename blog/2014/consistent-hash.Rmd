@@ -1,10 +1,19 @@
-**声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@gmail.com>
+---
+author: "patrick.unicorn"
+output:
+  html_document:
+    css: ../css/main.css
+    highlight: null
+    theme: null
+---
+
+**声明：** 所写均为个人阅读所思所想，请批判阅读。
 
 * * *
 
 ## Theory
 
-一致性哈希(Consistent Hashing)算法是分布式领域非常重要的算法，它的原理比较简单。其基本思想就是将对象和 cache 都映射到同一个 hash 数值空间中，并且使用相同的hash 算法。
+一致性哈希(Consistent Hashing)算法是分布式领域非常重要的算法，它的原理比较简单。其基本思想就是使用相同的hash 算法，将对象和 cache 都映射到同一个 hash 数值空间中。主要目的是当增减cache节点时，避免大规模影响cache访问有效性，提高系统维护性。
 
 <!--more-->
 
@@ -12,11 +21,11 @@
 
 #### 普通哈希
 
-![普通哈希流程](http://www.gliffy.com/go/publish/image/6119491/L.png)
+![普通哈希](../images/content/consistent-hash-01.png)
 
 #### 一致性哈希
 
-![一致性哈希流程](http://www.gliffy.com/go/publish/image/6119600/L.png)
+![一致性哈希](../images/content/consistent-hash-02.png)
 
 ## Problems
 
