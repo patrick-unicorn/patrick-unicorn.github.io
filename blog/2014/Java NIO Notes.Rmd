@@ -1,36 +1,48 @@
-**声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@gmail.com>
+---
+author: "patrick.unicorn"
+output:
+  html_document:
+    css: ../css/main.css
+    highlight: null
+    theme: null
+---
+
+Java NIO笔记
+===
+
+**声明：** 所写均为个人阅读所思所想，请批判阅读。
 
 * * *
 
-<pre>
-Mina为ApacheDirectoryServer的底层NIO框架：http://mina.apache.org
-Netty为JBoss的NIO框架：http://www.jboss.org/netty
-Grizzly是Sun的GlassFish服务器的底层NIO框架：http://grizzly.java.net
-</pre>
-
-* * *
+<blockquote>
++ Mina为ApacheDirectoryServer的底层NIO框架：http://mina.apache.org
++ Netty为JBoss的NIO框架：http://www.jboss.org/netty
++ Grizzly是Sun的GlassFish服务器的底层NIO框架：http://grizzly.java.net
+</blockquote>
 
 ## Why
 
 操作系统习惯移动大块的数据，而1.4以前的JVM习惯于一铲子一铲子的移动数据，这显然不是应对大数据的有效方式。早期的jvm为了实现跨平台特性，为此做了很多的妥协，I/O就是其中之一，很多操作系统本身提供的强大I/O特性都没有被使用。随着操作系统对于I/O性能方案的不断改进，JVM原有的BIO方案显然已经落伍了。
 
-<pre>IO的本质：
-    I/O的过程分为两部分：
-        1. 在硬件缓冲区和内核缓冲区之间搬移数据，这部分由DMA控制，不占用CPU。
-        2. 在用户空间缓冲区和内核缓冲区之间搬移数据，这部分由CPU控制。
-    
-    通过虚拟内存技术可以达到让硬件缓冲区数据直接“搬移”到“用户空间”的效果。
-    
-    所有I/O都直接或者间接的通过内核空间，基于如下原因，用户空间是无法直接操作硬件：
-        1. 操作系统处于安全原因都禁止用户空间直接访问硬件。
-        2. 硬件缓冲区的大小都是固定的，而用户空间进程的缓冲区可能是任意大小，为了实现“适配”，就需要内核空间。
-</pre>
+<blockquote>
+I/O的过程分为两部分：
+
+1. 在硬件缓冲区和内核缓冲区之间搬移数据，这部分由DMA控制，不占用CPU。
+2. 在用户空间缓冲区和内核缓冲区之间搬移数据，这部分由CPU控制。
+
+通过虚拟内存技术可以达到让硬件缓冲区数据直接“搬移”到“用户空间”的效果。
+
+所有I/O都直接或者间接的通过内核空间，基于如下原因，用户空间是无法直接操作硬件：
+
+1. 操作系统处于安全原因都禁止用户空间直接访问硬件。
+2. 硬件缓冲区的大小都是固定的，而用户空间进程的缓冲区可能是任意大小，为了实现“适配”，就需要内核空间。
+</blockquote>
 
 ## what
 
 Java NIO是基于select/poll机制的多路复用IO模型的Java封装实现。
 
-#### I/O模式
+### I/O模式
 
 不像程序设计有23中设计模式，I/O操作只有两种模式：同步模式和异步模式，如下：
 
@@ -39,7 +51,7 @@ Java NIO是基于select/poll机制的多路复用IO模型的Java封装实现。
 + I/O复用 - 同步模式
 + 异步I/O - 异步模式
 
-<pre>（非）阻塞与（异）同步：
+<blockquote>（非）阻塞与（异）同步：
 
 要理解这两个概念之间的区别，首先必须明白I/O操作的步骤：
     1. 发起I/O请求（用户空间）
@@ -50,11 +62,11 @@ Java NIO是基于select/poll机制的多路复用IO模型的Java封装实现。
 而阻塞I/O与非阻塞的I/O的关键区别在于第一个步骤是否阻塞，说白了是一种读取或者写入操作函数的实现方式，阻塞方式下读取或者写入函数将一直等待，而非阻塞方式下，读取或者写入函数会立即返回一个状态值。
 
 从上述定义看，其实阻塞与非阻塞都可以理解为同步范畴下才有的概念，对于异步，就不会再去分阻塞非阻塞。对于用户进程，接到异步通知后，就直接操作进程用户态空间里的数据好了，异步I/O本身必然是非阻塞的，需要操作系统内核的支持。
-</pre>
+</blockquote>
 
 ## How
 
-#### ByteBuffer
+### ByteBuffer
 
 Java NIO中引入的缓冲区Buffer，可以理解为“带状态的字节数组”，它的操作关键即在于其状态变量：
 
@@ -63,26 +75,27 @@ Java NIO中引入的缓冲区Buffer，可以理解为“带状态的字节数组
 * Limit 当前最大读写索引位置
 * Mark 标记索引位置
 
-<pre>四者的大小关系：Position < Mark < Limit < Capacity </pre>
+<quote>四者的大小关系：Position < Mark < Limit < Capacity </quote>
 
 ByteBuffer是最重要的Buffer，其他Buffer均基于它。
 
-#### ByteBuffer和ByteArray的异同
+### ByteBuffer和ByteArray的异同
 
 * ByteBuffer添加了内部状态，封装了更加灵活的操作，如相对读和绝对读等等
 * ByteBuffer支持直接缓冲区
 * ByteBuffer封装了对于数值类型的直接读写方法，如putLong，readLong等等
 * ByteBuffer封装了ByteOrder，即大端和小端排序
-  <pre>关于字节排序：
-    大端排序：低地址（索引）存放高位字节
-    小端排序：低地址（索引）存放低位字节
-    
-    TCP网络流统一规定使用大端排序，JVM统一使用大端排序，CLR统一使用小端排序。字节排序问题在开发网络(C/S)通信系统时，是个需要关注的问题。
-    注：第一次认识字节序的问题，也是在开发一个JVM/CLR异构通信系统时。
-  </pre>
+<blockquote>关于字节排序：
+
++ 大端排序：低地址（索引）存放高位字节
++ 小端排序：低地址（索引）存放低位字节
+
+TCP网络流统一规定使用大端排序，JVM统一使用大端排序，CLR统一使用小端排序。字节排序问题在开发网络(C/S)通信系统时，是个需要关注的问题。
+注：第一次认识字节序的问题，也是在开发一个JVM/CLR异构通信系统时。
+</blockquote>
 
 
-#### 例子：模拟从输入流中读取长度固定为N的消息
+### 示例（模拟从输入流中读取长度固定为N的消息）
 
 + ByteArray
 
@@ -124,7 +137,7 @@ ByteBuffer是最重要的Buffer，其他Buffer均基于它。
   ...
 </pre>
 
-#### Selector
+### Selector
 
 Selector是对系统级select/poll机制的直接封装。
 
@@ -142,7 +155,7 @@ Selector是对系统级select/poll机制的直接封装。
     }
 </pre>
 
-#### SelectionKey
+### SelectionKey
 
 该对象表示了一个特定的通道对象和一个特定的选择器对象之间的注册关系：read、write、connect、accept。
 
@@ -153,7 +166,7 @@ Selector是对系统级select/poll机制的直接封装。
 
 SelectionKey的"附件"，在用完后应当及时清除（赋值为null）， 如果SelectionKey对象本身生命期较长，而已经没用的附件本身没有及时清除，就可能面临内存泄露问题，该附件不会被GC回收（因为SelectionKey还保持有该附件的引用）。
 
-#### Channel
+### Channel
 
 Channel的角色相当于Java BIO中的InputStream/OutputStream。最大的改进在于，Channel支持非阻塞异步的操作。
 
@@ -219,10 +232,11 @@ Channel的角色相当于Java BIO中的InputStream/OutputStream。最大的改�
 * 在不同的操作系统上，甚至在同一操作系统的不同文件系统上，文件锁定的基本行为都可能有差异的。有些仅支持劝告锁，有些仅支持强制锁，或者两者均支持，您应该总是按照劝告锁的假定来管理文件锁，因为这是最安全的。当然，如果能够理解部署环境的文件锁机制，是更好的。
 
 * 文件锁是与文件关联的，不是关联通道，线程，文件锁的目的是再进程级别上判别文件，而不是线程级别上，这意味着如下情况：
-<pre>
+
+<blockquote>
     1. 文件按锁并不适用于控制同一个Jvm上不同线程对于文件的访问互斥。
     2. 假设一个Jvm上A线程获取了文件F的文件独占锁，该jvm上的B线程要请求获取该独占锁，那么，B线程可以获取该独占锁。而如果B是另外一个Jvm（进程）上的线程，那么B获取不到该独占锁。
-</pre>
+</blockquote>
  
 * 如果需要控制同一个进程中的多个线程或通道之间的文件锁，需要自己建立自己的轻量级锁定方案，通常，内存映射文件是一个合适的选择。
  
@@ -271,13 +285,16 @@ Channel的角色相当于Java BIO中的InputStream/OutputStream。最大的改�
 *  DatagramChannel模拟面向包的UDP协议。
  
 * 虽然流socket使用的很广泛，但是包socket仍然是和有用的，而且包socket的吞吐量比流socket大很多。
-<pre>下面是一些使用包socket的理由:
-    a. 你的程序可以忍受数据包的丢失
-    b. 你的程序希望“发射后不管”， 不需要知道数据包是否到达
-    c. 数据吞吐量比可靠性重要
-    d. 您需要同时发送数据给多个接受者（多播或广播）
-    如果以上原则中的一个后多个满足，那么，使用包socket是合适的。
-</pre>
+
+<blockquote>下面是一些使用包socket的理由:
+
+a. 你的程序可以忍受数据包的丢失
+b. 你的程序希望“发射后不管”， 不需要知道数据包是否到达
+c. 数据吞吐量比可靠性重要
+d. 您需要同时发送数据给多个接受者（多播或广播）
+
+如果以上原则中的一个后多个满足，那么，使用包socket是合适的。
+</blockquote>
  
 * 管道pipe于windows和unix上的概念有所不同，在OS上，管道是进程之间通信的一种方式，在NIO中管道式一个jvm实例内部各个线程之间的通信方式。虽然线程之间通信还存在其他更好性能的方式，但是，管道的优点在于封装性。Pipe的另一个有用的用处是辅助测试。另外，管道能够承载的数据量是有限的，依赖于具体实现。
  
