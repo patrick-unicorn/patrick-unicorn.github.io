@@ -85,6 +85,7 @@ ByteBuffer是最重要的Buffer，其他Buffer均基于它。
 * ByteBuffer支持直接缓冲区
 * ByteBuffer封装了对于数值类型的直接读写方法，如putLong，readLong等等
 * ByteBuffer封装了ByteOrder，即大端和小端排序
+
 <blockquote>关于字节排序：
 
 + 大端排序：低地址（索引）存放高位字节
@@ -159,9 +160,11 @@ Selector是对系统级select/poll机制的直接封装。
 
 该对象表示了一个特定的通道对象和一个特定的选择器对象之间的注册关系：read、write、connect、accept。
 
-<pre>给SelectionKey对象上关联一个自定义的对象“附件”：
-    public final Object attach (Object ob);
-    public final Object attachment();
+给SelectionKey对象上关联一个自定义的对象“附件”：
+
+<pre>
+public final Object attach (Object ob);
+public final Object attachment();
 </pre>
 
 SelectionKey的"附件"，在用完后应当及时清除（赋值为null）， 如果SelectionKey对象本身生命期较长，而已经没用的附件本身没有及时清除，就可能面临内存泄露问题，该附件不会被GC回收（因为SelectionKey还保持有该附件的引用）。
@@ -231,11 +234,11 @@ Channel的角色相当于Java BIO中的InputStream/OutputStream。最大的改�
 
 * 在不同的操作系统上，甚至在同一操作系统的不同文件系统上，文件锁定的基本行为都可能有差异的。有些仅支持劝告锁，有些仅支持强制锁，或者两者均支持，您应该总是按照劝告锁的假定来管理文件锁，因为这是最安全的。当然，如果能够理解部署环境的文件锁机制，是更好的。
 
-* 文件锁是与文件关联的，不是关联通道，线程，文件锁的目的是再进程级别上判别文件，而不是线程级别上，这意味着如下情况：
+* 文件锁是与文件关联的，不是关联通道，线程，文件锁的目的是在进程级别上判别文件，而不是线程级别上，这意味着如下情况：
 
 <blockquote>
-    1. 文件按锁并不适用于控制同一个Jvm上不同线程对于文件的访问互斥。
-    2. 假设一个Jvm上A线程获取了文件F的文件独占锁，该jvm上的B线程要请求获取该独占锁，那么，B线程可以获取该独占锁。而如果B是另外一个Jvm（进程）上的线程，那么B获取不到该独占锁。
+1. 文件按锁并不适用于控制同一个Jvm上不同线程对于文件的访问互斥。
+2. 假设一个Jvm上A线程获取了文件F的文件独占锁，该jvm上的B线程要请求获取该独占锁，那么，B线程可以获取该独占锁。而如果B是另外一个Jvm（进程）上的线程，那么B获取不到该独占锁。
 </blockquote>
  
 * 如果需要控制同一个进程中的多个线程或通道之间的文件锁，需要自己建立自己的轻量级锁定方案，通常，内存映射文件是一个合适的选择。
