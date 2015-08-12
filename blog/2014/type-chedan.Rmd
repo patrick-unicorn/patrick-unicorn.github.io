@@ -1,11 +1,16 @@
 ---
-title: "A Little Understanding of Type System"
 author: "patrick.unicorn"
-date: "Tuesday, November 18, 2014"
-output: html_document
+output:
+  html_document:
+    css: ../css/main.css
+    highlight: null
+    theme: null
 ---
 
-**声明：** 所写均为个人阅读所思所想，限于知识层次和结构，难免有错误遗漏之处，请批判阅读。探讨可循：<mr.geek.ma@foxmail.com>
+类型乱弹
+===
+
+**声明：** 所写均为个人阅读所思所想，请批判阅读。
 
 * * *
 
@@ -13,9 +18,7 @@ output: html_document
 
 程序设计语言中的类型非常类似于人类社会中的“角色(role)”概念。正如不同的“角色”承担一定的职责行为一样，不同的类型也支持固定的操作集合。
 
-就硬件层面而言，通常仅仅支持一组数学概念上的最小类型集合：整数、实数、布尔、字符。而在软件层面，不同的程序设计语言会提供必要的扩展类型和扩展机制(允许程序员自定义类型，如OOP中的class)。
-
-事实上，以集合论的视角观察类型系统，会对很多类型的相关概念有更加清晰的理解。类型就是一个值域(集合)，而类型系统则是类型集合，如下：
+以集合论的视角观察类型系统，会对很多类型的相关概念有更加清晰的理解。类型就是一个值域(集合)，而类型系统则是类型集合，如下：
 
 + 整数类型 {0, 1, 2, 3, 4 ···}
 + 实数类型 {0.1, 1, 2.4 ···}
@@ -31,8 +34,6 @@ output: html_document
 | 联合      | 多继承或多接口实现        |
 | 集合的集合| 基本类型构成符合类型      |
 | 空集合    | 空类型                    |
-
-<!--more-->
 
 **类型**隐含如下各项：
 
@@ -58,7 +59,7 @@ output: html_document
 
 ### Necessity(必要性)
 
-对于程序语言而言，类型系统是必须的么？这取决于我们观察的角度。就语法层面而言，类型系统并非必须；但在程序执行层面，类型系统是必须的。因为计算机的本质是数值计算，因此，在执行层面至少存在数值类型。
+对于程序语言而言，类型系统是必须的么？这取决于我们观察的角度。就语法层面而言，类型系统并非必须；但在程序执行层面，类型系统是必须的。因为计算机程序的本质是二进制数值计算，因此，在执行层面至少存在数值类型。
 
 程序语言引入类型系统的优点：
 
@@ -225,7 +226,7 @@ Java中仅支持子类返回值协变(从子类到超类视角看)，C#中返回
 
 C#中自定义子类化的方式称为“Declaration-site variance annotations”，使用关键字`out`用定义泛型方法协变，关键字`in`用以定义泛型方法逆变，如果不修饰，则不可变异。有点必须注意的是，上面的方式只能作用域接口声明，不能用于类。
 
-```CSharp
+```C#
 // error
 class Parent<out T> {
     ...
@@ -235,6 +236,9 @@ class Parent<out T> {
 2. Java
 
 ```Java
+class Parent<? extends String> {
+    ...
+}
 ```
 
 **泛型的逆变和协变比较复杂，目前还在继续研究中...之后需要补齐这一段。**
@@ -271,7 +275,7 @@ C/C++中的指针就不是类型安全的。
 
 变量(值存储地址) --> 实际值
 
-*C#枚举是值类型；Java枚举是不可变引用类型*
+C#枚举是值类型；Java枚举是不可变引用类型
 
 + 引用类型 
 
@@ -281,8 +285,8 @@ C/C++中的指针就不是类型安全的。
 
 ## Reference
 
-+ [Covariance_and_contravariance](http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science))
++ [Covariance And Contravariance](http://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science))
 
 + [Subtyping](http://en.wikipedia.org/wiki/Subtyping)
 
-+ [coolshell](http://coolshell.cn/articles/10169.html)
++ [Coolshell](http://coolshell.cn/articles/10169.html)
