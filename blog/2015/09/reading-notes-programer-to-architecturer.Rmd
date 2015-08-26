@@ -223,6 +223,8 @@ output:
 
 + 需求分析工作内容：
 
+![需求分析工作](../../images/content/reading-notes-programer-to-architecturer-03.png)
+
 <blockquote>
 1. 需求沟通。
 2. 确定非功能需求。
@@ -231,6 +233,32 @@ output:
 
 3. 需求分析主线。
 
-![需求分析工作](../../images/content/reading-notes-programer-to-architecturer-03.png)
+![需求分析主线](../../images/content/reading-notes-programer-to-architecturer-04.png)
 
 </blockquote>
+
++ 领域建模的精髓是“业务决定功能，功能决定模型”。领域建模的输入是**当前的功能**和**未来的功能**。
+
+![需求分析主线](../../images/content/reading-notes-programer-to-architecturer-05.png)
+
++ 关键需求决定架构大方向。
+
+![关键需求确认](../../images/content/reading-notes-programer-to-architecturer-06.png)
+
++ 概念架构设计输入是“关键需求”，输出是“一个决定，四个选择”：
+
+![关键需求确认](../../images/content/reading-notes-programer-to-architecturer-07.png)
+
++ 概念架构和细化架构的关键区别是：概念架构没有设计到“模块”+“接口”一级，而细化架构必须关注“模块”+“接口”：
+
+![细化架构的位置](../../images/content/reading-notes-programer-to-architecturer-08.png)
+
+![细化架构内容](../../images/content/reading-notes-programer-to-architecturer-09.png)
+
+![细化架构输入输出](../../images/content/reading-notes-programer-to-architecturer-10.png)
+
++ 架构验证需要根据情形判断是否有必要。其目的在于尽早将那些有风险的重要部分开发出来，及早验证。
+
+![架构验证的位置](../../images/content/reading-notes-programer-to-architecturer-11.png)
+
++ 
