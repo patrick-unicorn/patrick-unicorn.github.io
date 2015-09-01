@@ -17,6 +17,8 @@ SQL语句顺序
 SELECT FROM WHERE GROUP BY HAVING ORDER BY
 </q>
 
+## 语法
+
 + `_`可以用以匹配单个任意字符。
 
 ```
@@ -132,3 +134,22 @@ select * from t_test where name BETWEEN 2 AND 3;
 select * from t_test where name >= 2 AND name <=3;
 ```
 
+## 性能
+
++ 避免使用SELECT *
+
++ 避免数字和字符串之间的转换
+
++ 谨慎设置索引，避免直接在插入更新操作非常频繁的表上设置索引
+
++ 设置合理索引，避免全表查询
+
++ 避免使用模糊匹配
+
++ 避免使用OR
+
++ 避免使用子查询，用连接查询替代
+
++ 合理使用存储过程
+
++ 使用UNION ALL，而非UNION
