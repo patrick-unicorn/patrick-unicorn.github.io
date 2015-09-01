@@ -134,6 +134,16 @@ select * from t_test where name BETWEEN 2 AND 3;
 select * from t_test where name >= 2 AND name <=3;
 ```
 
++ 分页
+
+```
+-- 95行到结尾
+SELECT * FROM table LIMIT 95,-1;
+SELECT * FROM table LIMIT 5;
+--前五行
+SELECT * FROM table LIMIT 0,5;
+```
+
 ## 性能
 
 + 避免使用SELECT *
