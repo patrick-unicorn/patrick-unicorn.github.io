@@ -126,6 +126,14 @@ SELECT * FROM t_table WHERE c_column IS NOT NULL;</code></pre>
 <pre><code>select * from t_test where name BETWEEN 2 AND 3;
 -- 等价于
 select * from t_test where name &gt;= 2 AND name &lt;=3;</code></pre>
+<ul>
+<li>分页</li>
+</ul>
+<pre><code>-- 95行到结尾
+SELECT * FROM table LIMIT 95,-1;
+SELECT * FROM table LIMIT 5;
+--前五行
+SELECT * FROM table LIMIT 0,5;</code></pre>
 </div>
 <div class="section level2">
 <h2>性能</h2>
