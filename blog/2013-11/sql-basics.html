@@ -30,6 +30,8 @@
 <h1>SQL基础-MySQL</h1>
 <hr />
 <p><q> SQL语句顺序 SELECT FROM WHERE GROUP BY HAVING ORDER BY </q></p>
+<div class="section level2">
+<h2>语法</h2>
 <ul>
 <li><code>_</code>可以用以匹配单个任意字符。</li>
 </ul>
@@ -124,6 +126,21 @@ SELECT * FROM t_table WHERE c_column IS NOT NULL;</code></pre>
 <pre><code>select * from t_test where name BETWEEN 2 AND 3;
 -- 等价于
 select * from t_test where name &gt;= 2 AND name &lt;=3;</code></pre>
+</div>
+<div class="section level2">
+<h2>性能</h2>
+<ul>
+<li><p>避免使用SELECT *</p></li>
+<li><p>避免数字和字符串之间的转换</p></li>
+<li><p>谨慎设置索引，避免直接在插入更新操作非常频繁的表上设置索引</p></li>
+<li><p>设置合理索引，避免全表查询</p></li>
+<li><p>避免使用模糊匹配</p></li>
+<li><p>避免使用OR</p></li>
+<li><p>避免使用子查询，用连接查询替代</p></li>
+<li><p>合理使用存储过程</p></li>
+<li><p>使用UNION ALL，而非UNION</p></li>
+</ul>
+</div>
 </div>
 
 
