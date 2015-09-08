@@ -1,0 +1,115 @@
+---
+author: "patrick.unicorn"
+output:
+  html_document:
+    css: ../css/main.css
+    highlight: null
+    theme: null
+---
+
+一致性哈希
+===
+
+**声明：** 所写均为个人阅读所思所想，请批判阅读。
+
+* * *
+
++ IOC即控制反转，其更加直接易懂的名字是Matin Fowler提出的“DI即依赖注入”。就是将**客户类**对**某一接口实现类**的**依赖**，交由第三方的容器（IOC/DI)去控制。
+
++ 依赖注入类型：
+
+1. 构造函数注入
+2. 属性注入
+3. 接口注入（不提倡）
+
++ 类装载器就是寻找类的字节码并构造出类再JVM内部表示的对象组件。
+
++ 装载类的步骤：
+
+1. 查找和导入class文件
+2. 检验class文件，给类的静态变量分派空间，将符号引用转变为直接引用。
+3. 对类的初始化变量和代码进行初始化。
+
++ 类装载器主要有：
+
+1. 根装载器 C++实现，不是ClassLoader的子类，Java中不可见，主要转载JRE核心类库。
+2. ExtClassLoader  是ClassLoader的子类，负责装在JRE中ext目录下的类。
+3. AppClassLoader 是ClassLoader的子类，负责装在classpath下的类。
+
+它们之间存在父子关系，即**根装载器 --> ExtClassLoader --> AppClassLoader**. 
+
++ JVM装载类采用“全盘委托制”：除非显示引用别的装载器，否则，该类及其所依赖和引用的类也由该装载器载入。并且，先委托父装载器进行查找载入，逐级向下由各级装载器尝试装入类，最终到当前装载器。
+
+如此设定主要是出于安全原因。试想如果有人恶意编写一个基础类（java.lang.String）,如果采用这种机制，就会避免被恶意载入。
+
+<blockquote>
+常见的java.lang.NoSuchMethodError错误的根源就在类装载机制：
+1. 相应的类没有装载
+2. 同时有多个版本的类，类装载器正好装载的那个版本类不存在此方法。
+</blockquote>
+
++ ClassLoader是java.lang中的抽象类，其主要方法如下：
+
+1. loadClass(String name, boolean resolve) name必须是类的完全限定名。如果只是确定类是否存在，或者只需要找到类的超类等，就不需要对类进行解析，可以将resolve设置为false.
+
+2. findeSystemClass(String nameg) 该方法是JVM默认的装载机制。
+
+3. defineClass(String name, byte[] b, int len, int off) 将类文件二进制数组转换为JVM中的java.lang.Class对象。
+
+4. findLoadedClass(String name) 判断是否已装载某类。如果已装载，返回class对象；否者，返回null.
+
+5. getParent() 获取父装载器，因为根装载器无法获得，因此会返回null.
+
++ 每个类在JVM中都有一个java.lang.Class对象，它提供基本的类结构元信息。所有的基本类型，甚至void都存在一个class对象，该对象在装载类时有JVM创建。
+
++ JDK提供的资源访问器是：java.net.URL和File。它们并不支持从类路径或WEB上下文中获取资源。因此，Spring设计了Resource接口。Spring使用其装载所有的资源。
+
++ Resource接口的实现类：
+
+1. ByteArrayResource
+2. ClasspathResource
+3. FileSystemResource
+4. InputStreamResource
+5. ServletContextResource
+6. UrlResource
+
++ 资源路径表示：
+
+|名称|前缀|资源类|
+|类路径|classpath:|ClasspathResource|
+|网络路径|ftp: http:|UrlResource|
+|文件|file:|FileSystemResource|
+
+<blockquote>
+三个独立的模块jar包，均有com.unicorn包，该包下分别有如下配置文件：
+
+|模块|配置文件|
+|--|--|
+|1|application-data.xml|
+|2|application-service.xml|
+|3|application.xml|
+
+如果使用**classpath:com/unicorn/application\*.xml**，只会加载某一个包中的配置文件。
+
+如果使用**classpath\*:com/unicorn/application\*.xml**，三个配置文件均会加载。 
+</blockquote>
+
++ Ant风格资源地址三种匹配符：
+
+1. `?`: 匹配一个字符
+2. `*`: 匹配任意个字符
+3. `**`: 匹配多层路径
+
++ BeanFactory是Spring的基础设施，面向Spring本身；ApplicationContext面向所有Spring应用开发者。
+
++ Spring中资源加载的基本类是`PathMatchingResourcePatternResolver`。
+
++ ApplicationContext主要的实现类是：`ClassPathXmlApplicationContext`和`FileSystemApplicationContext`。
+
++ ApplicationContext除了实现BeanFactory相关接口（类）外，还实现了如下接口以扩充功能：
+
+1. ApplicationEventPublisher 发布应用上下文事件，如容器启动、关闭事件。实现`ApplicationListener`接口的Bean可以接收到容器事件。
+2. MessageResource 提供i18n国际化消息访问。
+3. ResourcePatternResolver 提供类似`PathMatchingResoucePatternResolver`的资源加载功能。
+4. LifeCycle 该接口提供start和stop方法，主要用于异步控制。ApplicationContext会将start和stop的信息传递给容器中所有实现了该接口的bean。
+
