@@ -7,7 +7,7 @@ output:
     theme: null
 ---
 
-一致性哈希
+Spring笔记整理
 ===
 
 **声明：** 所写均为个人阅读所思所想，请批判阅读。
@@ -112,4 +112,65 @@ output:
 2. MessageResource 提供i18n国际化消息访问。
 3. ResourcePatternResolver 提供类似`PathMatchingResoucePatternResolver`的资源加载功能。
 4. LifeCycle 该接口提供start和stop方法，主要用于异步控制。ApplicationContext会将start和stop的信息传递给容器中所有实现了该接口的bean。
+
++ WebApplicationContext是专为WEB容器准备的，允许从Web根目录的路径中装载配置文件。其被作为属性（建为`ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE`）放置在ServletContext中，可以通过WebApplicationContextUtils获取。WebApplicationContext也保持了对ServletContext的引用。
+
+```
+(WebApplicationContext) servletContext.getAttribute(
+    WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
+```
+
++ 非WEB应用下，只有Singleton和Prototype两种Bean作用域。而WebApplicationContext中添加了三个新的Bean作用域：Request、Session、Global Session。
+
++ WebApplicationContext的初始化需要ServletContext，因此，spring提供了两个类支持：
+
+1. org.springframework.web.context.ContextLoaderServlet
+2. org.springframework.web.context.ContextLoaderListener
+
+将其配置在WEB容器的web.xml即可。
+
++ 如果要使用log4j引擎，可以将log4j的配置文件放在WEB-INF/class下，如果需要放到其他位置，那么需要使用spring提供的支持类：
+
+1. Log4jConfigServlet
+2. Log4jConfigListener
+
++ 需要注意的是，log4j需要保证在WebApplicationContext之前初始化，因此，如果使用servlet，则Log4jConfigServlet要先于ContextLoaderServlet启动（配置startup）。如果使用listener，则Log4jConfigListener必须配置在ContextLoaderListener之前。
+
++ 使用HierarchicalBeanFactory，可以建立父子关联的容器体系。子容器可以访问父容器的Bean，反之，不可。子容器中可以存在与父容器id相同的bean。
+
++ 父子容器的一个典型应用就是SpringMVC。在SpringMVC中，展现出Bean存在于子容器中，而业务层和持久层的Bean位于父容器中，这样，就隔离了Bean。
+
++ Spring中的Bean生命周期有两个方面：
+
+1. Bean的作用域
+2. 实例化Bean时所经历的一系列阶段
+
++ Spring Bean的生命周期：
+
+![spring bean生命周期](../images/content/spring-notes-01.png)
+
+其生命周期管理方法分为三个层面
+
+1. Bean自身方法【绿色】 
+2. Bean级接口实现【黄色】 处理个性
+
+```
+- BeanNameAware
+- BeanFactoryAware
+- ApplicationContextAware
+- InitializingBean
+- DisposableBean。
+```
+
+3. 容器级接口实现【红色】 处理共性
+
+```
+- InstantiationAwareBeanPostProcessor
+- BeanPostProcessor
+```
+
+可以同时实现多个容器级接口，但必须同时实现org.springframework.core.Ordered接口。
+
++ 
+
 
