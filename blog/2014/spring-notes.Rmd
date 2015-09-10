@@ -162,15 +162,162 @@ Spring笔记整理
 - DisposableBean。
 ```
 
+这类接口相当于将Bean与Spring框架紧耦合了，因此，应当尽可能的少用，可采取其他替代方式。
+
 3. 容器级接口实现【红色】 处理共性
 
 ```
 - InstantiationAwareBeanPostProcessor
 - BeanPostProcessor
+- BeanFactoryPostProcessor(实现类如：PropertyPlaceholderConfigurer等)
 ```
 
 可以同时实现多个容器级接口，但必须同时实现org.springframework.core.Ordered接口。
 
-+ 
++ Bean的id必须唯一，并且符合xml命名规则。
 
++ Bean的name可以有多个，使用`,`分隔。
 
++ 注入方式
+
+1. 属性注入
+2. 构造函数注入
+3. 工厂方法注入
+
+```
+<bean factory-bean="" factory-method="" />
+```
+
++ ![CDATA[....]]的作用类似于转义，即将其中的字符全部当做普通字符处理，避免破坏XML格式。
+
++ 通过ref元素可以引用其他bean，其包含三个属性：
+
+```
+<bean ...>
+    <property>
+        <ref bean="<id>" />
+    </property>
+</bean>
+
+// 被引用的bean必须在当前配置文件
+<bean ...>
+    <property>
+        <ref local="<id>" />
+    </property>
+</bean>
+
+// 被引用的bean必须在父容器
+<bean ...>
+    <property>
+        <ref bean="<id>" />
+    </property>
+</bean>
+```
+
++ 内部Bean
+
+```
+<bean ...>
+    <property ...>
+        // 内部Bean
+        <bean ...>
+            <property ... />
+            <property ...
+        </bean>
+    </property>
+</bean>
+```
+
+内部Bean即使声明id、name、scope等，也会被忽略。scope默认是prototype。
+
++ 设置null值
+
+```
+<property><null /></property>
+```
+
++ 设置级联属性
+
+```
+<property name="car.name" value="大众" />
+或
+<property name="car.name">
+    <value>大众</value>
+</property>
+```
+
++ 引入p空间，是为了简化xml配置。
+
+```
+<bean ...>
+    <property name="price" value="200" />
+    <property name="shop" ref="711Shop" />
+</bean>
+=>
+<bean p:price="200" />
+<bean p:shop_ref="711Shop" />
+```
+
++ 集合属性：List、Set、Map、Properties
+
++ Spring提供了4种自动装配类型：
+
+|自动装配类型|说明|
+|--|--|
+|byType|根据类型|
+|byName|根据类名（非完全限定名）|
+|constructor|与byType类似，只不过是针对构造函数注入而言的|
+|autodetect|如果bean提供了默认构造函数，则使用byType；否则，使用constructor|
+
++ 可以通过配置文件声明Bean之间的继承关系，但实际应用中很少用。
+
+```
+<bean id="pa" abstract="true"></bean>
+<bean id="son" parent="pa"></bean>
+```
+
++ `<idref>`标签主要是用于引用另外一个Bean的**id字面量**。
+
++ `depend-on`属性可以用于定义当前bean的前置依赖。
+
+```
+<bean id="A" depend-on="B,C" />
+```
+
++ `<import resource="" />可以用于将多个配置文件整合到一个配置文件中。这在大型应用中非常有用。
+
++ 如果要在WEB环境下使用Request、Session、Global Session三个作用域，则需要在web.config中添加配置项：
+
+```
+<filter>
+    <filter-name>requestContextFilter</filter-name>
+    <filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>requestContextFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+
+或者
+
+<listener>
+    <listener-class>
+        org.springframework.web.context.request.RequestContextListener
+    </listener-class>
+</listener>
+```
+
++ Gloabal Session作用域类似于Session，但仅限于Porlet应用中。
+
++ Java只能对接口添加动态代理，如果要给类添加动态代理，需要应用CGlib库。
+
++ 如果要在singleton或prototype的Bean中引用WEB作用域Bean，那么需要使用AOP。
+
+```
+<bean id="A" class="" scope="request">
+    <aop:scoped-proxy />
+</bean>
+<bean>
+    <property name="" ref="A" />
+</bean>
+```
