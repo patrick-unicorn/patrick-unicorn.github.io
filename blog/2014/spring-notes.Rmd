@@ -321,3 +321,87 @@ Spring笔记整理
     <property name="" ref="A" />
 </bean>
 ```
+
++ 复杂Bean的创建，为了避免配置繁琐，可以使用FactoryBean接口。
+
+```
+// MyFactoryBeanImpl#getObject方法会代理容器的getBean方法
+<bean class="MyFactoryBeanImpl"></bean>
+```
+
++ 四种Bean注解：Component、Controller、Service、Repository
+
++ `<context:component-scan>`标签用于定义根据一定规则自动装配Bean。
+
+```
+// resouces-pattern功能较简单
+<context:component-scan base-package="com.unicorn" resource-pattern="domain/*.class" />
+// filter可以实现复杂的匹配过滤
+<context:component-scan base-package="com.unicorn">
+    <context:include-filter type="" expression="">
+    <context:exclude-filter type="" expression="">
+</context:component-scan>
+```
+
+`context:include-filter`和`context:exclude-filter`的过滤表达式设置如下：
+
+|type|expression|description|
+|--|--|--|
+|annotation|com.unicorn.XxxAnnotation|所有标注该注解的类|
+|assignable|com.unicorn.XxxService|所有继承该接口（或类）的类|
+|aspectj|com.unicorn.*Service+|类名以Service结尾，并且继承或扩展该接口（或类）的类|
+|regex|com\.unicorn\.Batch*|所有类名以Batch开始的类|
+|custom|com.unicorn.MyFilter|需要继承org.spring.framework.core.type.TypeFilter|
+
++ @PostConstruct、@PreDestroy注解可以标注方法，其效果相当于配置文件中的`init-method`和`destroy-method`
+
++ Java标准库中`EventObject`、`EventListener`表达**事件**和**监听器**。Spring的事件机制扩展于此。
+
++ 事件源、事件管理器（监听器注册等）、事件广播通常可由一个对象承担。如果事件体系过于复杂，可以进行分拆。
+
++ Spring容器事件架构：
+
+![Spring容器事件](../images/content/spring-notes-02.png)
+
++ AOP术语
+
+1. 连接点（Joinpoint） 
+
+程序执行的某个**特定位置（具有边界性质）**：如类初始化前、类初始化后、方法调用前、方法调用后、方法抛出异常后等等。Spring仅支持方法的连接点，即：方法执行前、方法执行后、方法抛出异常、方法执行前后的这些执行点。
+
+2. 切点（Pointcut）
+
+连接点相当于数据库的记录，而切点相当于查询条件。一个切点可以匹配多个连接点。
+
+3. 增强（Advice）
+
+是织入到目标类连接点上的一段程序代码。
+
+4. 引介（Introduction）
+
+一种特殊的**增强**，它为类添加属性或方法。
+
+5. 织入（Weaving）
+
+将**增强**添加到目标类的过程。Spring采用动态代理织入，而AspectJ采用编译期和类装载期织入。
+
+<blockquote>
+1. 编译期织入
+2. 类装载期织入
+3. 动态代理织入
+</blockquote>
+
+6. 代理（Proxy）
+
+一个类被AOP织入**增强**之后，就产生了一个新类。根据实现方式的不同，代理可能是具有统一接口类，或是目标类的子类。
+
+7. 切面（Aspect）
+
+切面由切点和增强（引介）组成。
+
+
++ 
+
+
+
+
