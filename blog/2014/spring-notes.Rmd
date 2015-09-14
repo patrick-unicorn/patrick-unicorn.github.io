@@ -400,7 +400,102 @@ Spring笔记整理
 切面由切点和增强（引介）组成。
 
 
-+ 
++ Spring使用了两种代理机制实现动态代理：
+
+1. JDK动态代理（基于接口）
+2. CGlib动态代理（基于接口和类）
+
++ 动态代理即在运行时创建接口的实现类及对象。
+
++ JDK的动态代理主要涉及java.lang.reflect的两个类：Proxy和InvocationHandler。
+
+1. InvocationHandler是一个接口，可以通过实现该接口定义横切逻辑，并通过反射调用目标类的代码。
+2. Proxy利用InvocationHandler动态创建一个符合某一接口的实例，生成目标类的代理对象。
+
+<blockquote>
+interface WxInterface {
+    void A();
+    Object B();
+}
+
+class PerformanceInvocationHandler implements InvocationHandler {
+    
+    private Object target;
+    
+    public PerformanceInvocationHandler(Object target) {
+        this.target = target;
+    }
+    
+    public  Object invokde(Object Proxy, Method method, Object[] args) {
+        // ... 性能监控
+        method.invoke(target, args);
+        // ... 性能监控    
+    }
+}
+
+WxInterface wxObj = new WxInterfaceImpl();
+PerformanceInvocationHandler performanceHandler = new PerformanceInvocationHandler(wxObj);
+
+WxInterface wxProxyObj = Proxy.newProxyInstance(
+    wxObj.getClass().getClassLoader(),
+    wxObj.getClass().getInterfaces(),
+    performanceHandler
+);
+
+wxProxyObj.A();
+wxProxyObj.B();
+</blockquote>
+
+
++ CGlib通过创建目标类的子类实现代理对象，因此，对于final，private方法，无法代理。
+
++ 按照**增强**在目标方法中的连接点位置，可分为：
+
+1. 前置增强 `MethodBeforeAdvice`
+2. 后置增强 `AfterReturningAdvice`
+3. 环绕增强 `MethodInterceptor`
+4. 异常抛出增强 `ThrowsAdvice`
+
+<blockquote>
+ThrowsAdvice是一个标记接口，但是，其内部方法的定义需要遵循如下的方法签名：
+
+`void afterThrowing(Method method, Object[] args, Object target, Throwable t)`
+
+1. 所有的方面名都必须是afterThrowing
+2. 前三个参数是可选的
+3. 两个定义相近的afterThrowing，spring会选择更匹配的。
+
+以下两个方法，当发生SQLException时，会匹配前者。
+`afterThrowing(SQLException ex)`
+`afterThrowing(Exception ex)`
+</blockquote>
+
+5. 引介增强 ``
+
++ Spring中使用`org.springframework.aop.framework.ProxyFactory`代理工厂将**增强**织入到目标类中。
+
++ Spring的代理体系：
+
+![spring proxy](../images/content/spring-notes-03.png)
+
++ CGlib创建代理对象时比较费时，但代理对象的运行效率比较高；而JDK动态代理则正好相反。因此，对于单例对象，优先使用CGlib代理。
+
++ 在Spring配置文件中配置代理对象，使用`org.springframework.apo.framework.ProxyFactoryBean`:
+
+```
+<bean id="myServiceProxy" class="org.springframework.apo.framework.ProxyFactoryBean">
+</bean>
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
