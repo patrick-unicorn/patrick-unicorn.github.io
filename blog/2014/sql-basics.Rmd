@@ -77,7 +77,7 @@ DROP TABLE SALESSUMMARY;
 ```
 ALTER TABLE table_name {ADD|DROP|MODIFY} column_name {data_ype};
 
-ALTER TABLE table_name ADD column_name datatype;
+ALTER TABLE table_name ADD column_name <datatype> DEFAULT <defaultValue>;
 ALTER TABLE table_name DROP COLUMN column_name;
 
 -- 把x列重命名为y，类型不变
