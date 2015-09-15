@@ -206,7 +206,29 @@ CopyOnWriteSet内部完全依赖CopyOnWriteArrayList，特性一致。写并发�
 
 ##### Queue
 
++ ConcurrentLinkedQueue
+
+高性能队列，高并发时通常性能优于BlockingQueue。
+
++ BlockingQueue（ArrayBlockingQueue & LinkedBlockingQueue）
+
+阻塞队列。其目的不在于不在于提升高并发时的队列性能，而在于**简化线程间的数据**共享。典型使用场景就是生产者-消费者模式中的缓冲器。
+
 ##### Dequeue
+
+双端队列。
+
++ ArrayDequeue
+
+基于Array实现。
+
++ LinkedDequeue
+
+基于链表实现。
+
++ LinkedBlockingDequeue
+
+线程安全，基于链表实现。该实现没有实现**读写分离**，高并发时，性能低于LinkedBlockingQueue和ConcurrentLinkedQueue。
 
 #### 并发控制方法
 
