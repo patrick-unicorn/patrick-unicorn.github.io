@@ -14,6 +14,8 @@ Spring笔记整理
 
 * * *
 
+## Spring IOC
+
 + IOC即控制反转，其更加直接易懂的名字是Matin Fowler提出的“DI即依赖注入”。就是将**客户类**对**某一接口实现类**的**依赖**，交由第三方的容器（IOC/DI)去控制。
 
 + 依赖注入类型：
@@ -76,6 +78,7 @@ Spring笔记整理
 + 资源路径表示：
 
 |名称|前缀|资源类|
+|--|--|--|
 |类路径|classpath:|ClasspathResource|
 |网络路径|ftp: http:|UrlResource|
 |文件|file:|FileSystemResource|
@@ -363,6 +366,8 @@ Spring笔记整理
 
 ![Spring容器事件](../images/content/spring-notes-02.png)
 
+## Spring AOP
+
 + AOP术语
 
 1. 连接点（Joinpoint） 
@@ -399,7 +404,6 @@ Spring笔记整理
 
 切面由切点和增强（引介）组成。
 
-
 + Spring使用了两种代理机制实现动态代理：
 
 1. JDK动态代理（基于接口）
@@ -412,7 +416,7 @@ Spring笔记整理
 1. InvocationHandler是一个接口，可以通过实现该接口定义横切逻辑，并通过反射调用目标类的代码。
 2. Proxy利用InvocationHandler动态创建一个符合某一接口的实例，生成目标类的代理对象。
 
-<blockquote>
+```
 interface WxInterface {
     void A();
     Object B();
@@ -444,7 +448,7 @@ WxInterface wxProxyObj = Proxy.newProxyInstance(
 
 wxProxyObj.A();
 wxProxyObj.B();
-</blockquote>
+```
 
 
 + CGlib通过创建目标类的子类实现代理对象，因此，对于final，private方法，无法代理。
@@ -462,7 +466,7 @@ ThrowsAdvice是一个标记接口，但是，其内部方法的定义需要遵�
 `void afterThrowing(Method method, Object[] args, Object target, Throwable t)`
 
 1. 所有的方面名都必须是afterThrowing
-2. 前三个参数是可选的
+2. 前三个参数是可选的，但必须要么一起提供，要么都不提供。
 3. 两个定义相近的afterThrowing，spring会选择更匹配的。
 
 以下两个方法，当发生SQLException时，会匹配前者。
@@ -470,7 +474,11 @@ ThrowsAdvice是一个标记接口，但是，其内部方法的定义需要遵�
 `afterThrowing(Exception ex)`
 </blockquote>
 
-5. 引介增强 ``
+5. 引介增强 因为必须通过子类继承某种增强接口来实现，因此，必须使用CGlib，而不能使用JDK动态代理。
+
+<blockquote>
+Spring定义了引介增强接口`InroductionInterceptor`，该接口没有任何方法，Spring提供了实现类`DelegatingInroductionInterceptor`，一般情况下，通过继承该实现类来定义自己的**引介增强类**。
+</blockquote>
 
 + Spring中使用`org.springframework.aop.framework.ProxyFactory`代理工厂将**增强**织入到目标类中。
 
@@ -484,16 +492,115 @@ ThrowsAdvice是一个标记接口，但是，其内部方法的定义需要遵�
 
 ```
 <bean id="myServiceProxy" class="org.springframework.apo.framework.ProxyFactoryBean">
+    <target-ref >
 </bean>
 ```
 
++ 如果需要精确表述**增强**施加的具体方法，需要使用Spring中用于描述切点的接口：`org.springframework.aop.PointCut`，它由ClassFilter和MethodMatcher组成，前者定位**类**，后者定位**方法**。
 
++ 切点类型：
 
+1. 静态切点
 
+抽象基类`org.springframework.aop.support.StaticMethodMatcherPointcut`。默认情况匹配所有类。其包含两个子类`NameMatchMethodPointcut`和`AbstractRegexpMethodPointcut`，前者使用简单字符串匹配方法签名，后者使用正则表达式。
 
+2. 动态切点
 
+抽象基类`org.springframework.aop.support.DynamicMethodMatcherPointcut`。默认匹配所有类。动态匹配时，由于发生在运行时，因此，每次方法调用都会进行匹配，有可能对性能造成影响。通过与`DefatulPointcutAdvisor`结合，可以构建**动态切面**。
 
+3. 注解切点
 
+实现类`org.springframework.aop.support.AnnotationMatchingPointcut`。用于注解。
+
+4. 表达式切点
+
+接口`org.springframework.aop.support.ExpressionPointcut`主要是为了支持AspectJ切点表达式而定义的。
+
+5. 流程切点
+
+实现类`org.springframework.aop.support.ControlFlowPointcut`。根据程序执行的堆栈信息判断当前方法是否由某个方法直接或间接调用，从而决定是否切入。通过与`DefatulPointcutAdvisor`结合，可以构建**流程切面**，但是必须注意，流程切面的性能与**动态切面**一样，比较低下，应慎用。
+
+6. 复合切点
+
+实现类`org.springframework.aop.support.ComposablePointcut`是为同时实现多个切点而提供的便捷类。其所有方法均返回`ComposablePointcut`。复合切点其实就是将两个切点（Pointcut）进行交集或并集运算。Spring中还专门提供了独立的工具类`org.springframework.aop.support.Pointcuts`，以支持对切点的操作。
+
++ 切面类型：
+
+<blockquote>
+增强（Advice）既包含横切代码，又包含部分连接点信息（粒度较粗，针对类的所有方法之前、之后等方位），因此，可以仅仅通过增强生成一个（简单的）切面。
+
+但是对于切点（Pointcut）而言，只包含连接点的信息，因此无法基于切点生成切面，必须结合增强。而在Spring中使用`org.springframework.aop.Advisor`表示切面，一个切面同时包含横切代码（增强Advice）和切点（Pointcut）。
+</blockquote>
+
+1. Advisor 一般切面，仅包含一个增强（Advice），没有Pointcut。因为增强（Advice）描述的粒度太粗，一般不直接使用。
+
+2. PointcutAdvisor 具有切点的切面。有一个增强Advice和一个Pointcut。
+
+3. IntroductionAdvisor 引介切面。应用于类层面（因为引介增强就是针对类的）。
+
+![spring pointcut](../images/content/spring-notes-04.png)
+
++ Advisor都实现了Ordered接口，Spring根据切面的定义顺序，决定实际织入切面的顺序。
+
++ `RegexpMethodPoincutAdvisor`匹配的是方法的“全额限定名”，即包含对象名，如`XXXService.method`。
+
++ 除了配置`ProxyFactoryBean`创建织入切面的代理，Spring通过对`BeanPostProcessor`的应用，自动完成创建代理工作。这对于大型系统而言，可以大大简化配置。这些实现类如下：
+
+![spring pointcut](../images/content/spring-notes-05.png)
+
++ 一般来说SpringAOP可以满足大部分的需求，如果不满足，可以考虑采用AspectJ（并不属于SpringAOP的范畴）。
+
++ Spring提供了**基于XML Schema**的AOP配置方式，其便捷程度与AspectJ相差无几。通过这个方式，**增强**并不需要继承BeforeAdvice等接口。一个schema配置例子如下：
+
+```
+<aop:config proxy-class-target="true">
+    <!-- pointcut -->
+    <aop:pointcut id="logPointcut" 
+        expression="target(com.unicorn.XXXService) and execution(*greetTo(..))">
+    </aop:pointcut>
+    
+    <!-- advisor -->
+    <aop:advisor advice-ref="XXXAdvice" pointcut-ref="logPointcut"></aop:advisor>
+    
+    <!-- advisor -->
+    <aop:aspect ref="XXXAdvice">
+        <aop:before method="log" pointcut-ref="logPointcut"/>
+    </aop:aspect>
+    
+    <!-- advisor -->
+    <aop:aspect ref="XXXAdvice">
+        <aop:after method="log" pointcut-ref="logPointcut"/>
+    </aop:aspect>
+</aop:config>
+```
+
++ Spring中定义切面的四种方式：
+
+1. AspectJ注解
+2. <aop:aspect>
+3. <aop:advisor>
+4. 基于Advisor类
+
+流程切面`ControlFlowPointcut`只能使用这种方式。
+
++ Spring中切面类型总结：
+
+![spring pointcut](../images/content/spring-notes-06.png)
+
++ Spring中对DAO层的异常体系进行了统一的抽象，设定了丰富而统一的各类异常类。
+
+## Spring Transaction
+
++ 事务的四个基本特性ACID:
+
+1. 原子性 事务操作不可分割
+2. 一致性 事务操作后数据状态与业务规则一致
+3. 隔离性 并发事务时，不同事务具有自己的数据空间。根据并发事务之间的干扰性，可以分为多个隔离级别。
+4. 持久性 一旦事务提交，则数据就保存到了数据库中。
+
++ 事务的隔离级别与并发性是对立的。隔离级别越高，并发性越差。
+
++ 
 
 
 
