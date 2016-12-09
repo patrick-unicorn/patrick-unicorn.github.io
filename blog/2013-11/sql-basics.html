@@ -193,16 +193,14 @@ Extra:显示了查询中MySQL的附加信息，关心Using filesort 和 Using te
 3. 如果IO和CPU都不是瓶颈，非常有可能是SQL单线程问题，解决方案可以考虑刚才提到的并行复制方案
 4. 如果还有问题，可以考虑sharding拆分方案</code></pre>
 <ul>
-<li><ul>
-<li>单表数据大小通常满足【1亿以下且4GB以下】，查询数据表的大小：</li>
-</ul></li>
+<li>单表数据大小主要依据表的查询场景，如果仅仅是单表查询通常满足【1亿以下且4GB以下】；如果场景更多是多表连接查询，那么多个连接表的大小总量应满足【1亿以下且4GB以下】。查询数据表的大小：</li>
 </ul>
 <pre><code>SELECT 
     table_name AS `Table`, 
     round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB` 
 FROM information_schema.TABLES 
-WHERE table_schema = &quot;$DB_NAME&quot;
-    AND table_name = &quot;$TABLE_NAME&quot;;</code></pre>
+WHERE table_schema = &quot;DB_NAME&quot;
+    AND table_name = &quot;TABLE_NAME&quot;;</code></pre>
 </div>
 </div>
 
