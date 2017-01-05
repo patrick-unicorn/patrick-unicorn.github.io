@@ -1,133 +1,96 @@
-<html><head>
+<!DOCTYPE html>
+<html>
+  <head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-    <link href="http://www.unicornsummer.com/css/home.css" rel="stylesheet" type="text/css">
-    <link rel="alternate" type="application/atom+xml" href="/atom.xml" title="Atom feed">
-    <link rel="shortcut icon" href="http://unicornsummer.com/images/icon.png">
+    <title>Counter - Coming Soon Theme</title>
 
-    <title>银三次元：阅读 思考 知识</title>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/soon.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+    
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
 
   </head>
-  <body>　　
-  
+  <!-- START BODY -->
+  <body class="nomobile">
 
-    <nav class="navbar navbar-default navbar-fixed-top" style="opacity: .9" role="navigation">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">银三次元：阅读 思考 知识</a>
+    <!-- START HEADER -->
+    <section id="header">
+        <div class="container">
+            <header>
+                <!-- HEADLINE -->
+                <h1 data-animated="GoIn"><b>COUNTER</b> site is coming soon...</h1>
+            </header>
+            <!-- START TIMER -->
+            <div id="timer" data-animated="FadeIn">
+                <p id="message"></p>
+                <div id="days" class="timer_box"></div>
+                <div id="hours" class="timer_box"></div>
+                <div id="minutes" class="timer_box"></div>
+                <div id="seconds" class="timer_box"></div>
+            </div>
+            <!-- END TIMER -->
+            <div class="col-lg-4 col-lg-offset-4 mt centered">
+            	<h4>LET ME KNOW WHEN YOU LAUNCH</h4>
+				<form class="form-inline" role="form">
+				  <div class="form-group">
+				    <label class="sr-only" for="exampleInputEmail2">Email address</label>
+				    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+				  </div>
+				  <button type="submit" class="btn btn-info">Submit</button>
+				</form>            
+			</div>
+            
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#">Blog</a></li>
-                <li><a href="https://www.diigo.com/user/patrick-unicorn" target="_blank">Diigo</a></li>
-                <li><a href="https://twitter.com/unicorn19850831" target="_blank">Twitter</a></li>
-                <li><a href="http://mahaijin.github.io/" target="_blank">MHJin</a></li>
+        <!-- LAYER OVER THE SLIDER TO MAKE THE WHITE TEXTE READABLE -->
+        <div id="layer"></div>
+        <!-- END LAYER -->
+        <!-- START SLIDER -->
+        <div id="slider" class="rev_slider">
+            <ul>
+              <li data-transition="slideleft" data-slotamount="1" data-thumb="assets/img/slider/1.jpg">
+                <img src="assets/img/slider/1.jpg">
+              </li>
+              <li data-transition="slideleft" data-slotamount="1" data-thumb="assets/img/slider/2.jpg">
+                <img src="assets/img/slider/2.jpg">
+              </li>
+              <li data-transition="slideleft" data-slotamount="1" data-thumb="assets/img/slider/3.jpg">
+                <img src="assets/img/slider/3.jpg">
+              </li>
+              <li data-transition="slideleft" data-slotamount="1" data-thumb="assets/img/slider/4.jpg">
+                <img src="assets/img/slider/4.jpg">
+              </li>
             </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-        
-<div class="row" style="padding-top: 70px">
-  <div class="container center-block">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Blog</h3>
         </div>
-        <ul class="list-group">
+        <!-- END SLIDER -->
+    </section>
+    <!-- END HEADER -->
 
-            <!--contentlist-->
-          <li class="list-group-item title">                                                                        
-             <a href="../blog/2016-07/read-website-architecture-and-java-middleware-practice.html" target="_blank">读《大型网站系统和Java中间件实践》</a>
-          </li>
-          <li class="list-group-item title">                                     
-             <a href="../blog/2016-03/gradle.html" target="_blank">Gradle学习</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2015-11/application-commons.html" target="_blank">常见系统构建注意事项</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2015-09/reading-notes-programer-to-architecturer.html" target="_blank">读《程序员向架构师转型必备》</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2015-08/software-design-conclusion.html" target="_blank">软件设计原则与模式</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2015-07/java-thread-lock-and-signals.html" target="_blank">Java同步机制</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2015-07/software-design-chedan.html" target="_blank">扯淡软件开发</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-12/iteration.html" target="_blank">迭代的认识</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-12/talent-madman.html" target="_blank">天才向左 疯子向右</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-12/scheme1.html" target="_blank">Scheme基础1</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-11/type-chedan.html" target="_blank">类型乱弹</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-10/programmer.html" target="_blank">程序员能力与学习</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-08/lambda.html" target="_blank">Lambda算子</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-08/translation-of-a-role-of-the-study-of-programming-languages-int-the-education-of-a-programmer.html" target="_blank">编程语言学习在编程教育中所扮演的角色</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2015-05/spring-tips.html" target="_blank">Spring Tips</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-04/java-nio-notes.html" target="_blank">Java NIO Notes</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2015-08/java-performance.html" target="_blank">读《Java程序性能优化》</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-03/io-pattern.html" target="_blank">IO模式</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-02/concurrency-control-mechanism.html" target="_blank">并发控制机制</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2014-02/concurrency-pattern.html" target="_blank">并发模式快瞥</a>
-          </li> 
-          <li class="list-group-item title">
-            <a href="../blog/2014-01/consistent-hash.html" target="_blank">一致性哈希</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2013-10/csharp-delegate.html" target="_blank">C#碎碎念之委托</a>
-          </li>
-          <li class="list-group-item title">
-            <a href="../blog/2013-11/sql-basics.html" target="_blank">SQL基础与性能优化（MySQL）</a>
-          </li> 
-        </ul>
-      </div>
-    </div>
-
-    <div class="col-md-2">
-    </div>
-  </div>
-</div>
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-</body></html>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/js/modernizr.custom.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/soon/plugins.js"></script>
+    <script src="assets/js/soon/jquery.themepunch.revolution.min.js"></script>
+    <script src="assets/js/soon/custom.js"></script>
+  </body>
+  <!-- END BODY -->
+</html>
